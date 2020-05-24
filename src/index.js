@@ -1,0 +1,1 @@
+var grid = new BHex.Grid(3);
