@@ -44,7 +44,7 @@ gulp.task("style", function () {
 
 // Минификация js
 gulp.task("uglify", function () {
-  return gulp.src(["src/*.js", "src/**/*.json"])
+  return gulp.src(["src/*.js", "src/**/*.js"])
     .pipe(sourcemaps.init())
     // .pipe(babel({
     //   presets: ['@babel/env']
