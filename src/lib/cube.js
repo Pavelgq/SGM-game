@@ -1,7 +1,6 @@
 export default class Cube {
 
-  directions = [new Cube(1, 0, -1), new Cube(1, -1, 0), new Cube(0, -1, 1), new Cube(-1, 0, 1), new Cube(-1, 1, 0), new Cube(0, 1, -1)];
-  diagonals = [new Cube(2, -1, -1), new Cube(1, -2, 1), new Cube(-1, -1, 2), new Cube(-2, 1, 1), new Cube(-1, 2, -1), new Cube(1, 1, -2)];
+  
   /**
    * Кубические координаты гексогональной сетки
    * @constructor
@@ -21,36 +20,36 @@ export default class Cube {
   }
 
   add(b) {
-    return new Hex(this.q + b.q, this.r + b.r, this.s + b.s);
+    return new Cube(this.q + b.q, this.r + b.r, this.s + b.s);
   }
 
   subtract(b) {
-    return new Hex(this.q - b.q, this.r - b.r, this.s - b.s);
+    return new Cube(this.q - b.q, this.r - b.r, this.s - b.s);
   }
 
   scale(k) {
-    return new Hex(this.q * k, this.r * k, this.s * k);
+    return new Cube(this.q * k, this.r * k, this.s * k);
   }
 
   rotateLeft() {
-    return new Hex(-this.s, -this.q, -this.r);
+    return new Cube(-this.s, -this.q, -this.r);
   }
 
   rotateRight() {
-    return new Hex(-this.r, -this.s, -this.q);
+    return new Cube(-this.r, -this.s, -this.q);
   }
 
   static direction(direction) {
-    return Hex.directions[direction];
+    return Cube.directions[direction];
 
   }
 
   neighbor(direction) {
-    return this.add(Hex.direction(direction));
+    return this.add(Cube.direction(direction));
   }
 
   diagonalNeighbor(direction) {
-    return this.add(Hex.diagonals[direction]);
+    return this.add(Cube.diagonals[direction]);
   }
 
   len() {
@@ -75,17 +74,17 @@ export default class Cube {
     } else {
       si = -qi - ri;
     }
-    return new Hex(qi, ri, si);
+    return new Cube(qi, ri, si);
   }
 
   lerp(b, t) {
-    return new Hex(this.q * (1.0 - t) + b.q * t, this.r * (1.0 - t) + b.r * t, this.s * (1.0 - t) + b.s * t);
+    return new Cube(this.q * (1.0 - t) + b.q * t, this.r * (1.0 - t) + b.r * t, this.s * (1.0 - t) + b.s * t);
   }
 
   lineDraw(b) {
     var N = this.distance(b);
-    var a_nudge = new Hex(this.q + 1e-06, this.r + 1e-06, this.s - 2e-06);
-    var b_nudge = new Hex(b.q + 1e-06, b.r + 1e-06, b.s - 2e-06);
+    var a_nudge = new Cube(this.q + 1e-06, this.r + 1e-06, this.s - 2e-06);
+    var b_nudge = new Cube(b.q + 1e-06, b.r + 1e-06, b.s - 2e-06);
     var results = [];
     var step = 1.0 / Math.max(N, 1);
     for (var i = 0; i <= N; i++) {
@@ -93,4 +92,10 @@ export default class Cube {
     }
     return results;
   }
+
+  
 }
+
+
+Cube.directions = [new Cube(1, 0, -1), new Cube(1, -1, 0), new Cube(0, -1, 1), new Cube(-1, 0, 1), new Cube(-1, 1, 0), new Cube(0, 1, -1)];
+Cube.diagonals = [new Cube(2, -1, -1), new Cube(1, -2, 1), new Cube(-1, -1, 2), new Cube(-2, 1, 1), new Cube(-1, 2, -1), new Cube(1, 1, -2)];

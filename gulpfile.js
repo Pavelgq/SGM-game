@@ -156,7 +156,7 @@ gulp.task("serve", function () {
   gulp.watch('less/**/*.less', gulp.parallel(["style"]));
   gulp.watch('*.html', gulp.parallel(["html"]));
   gulp.watch('build\*.html').on('change', server.reload);
-  gulp.watch('src/*.js', gulp.parallel(["uglify"]));
+  gulp.watch(['src/*.js','src/**/*.js'], gulp.parallel(["uglify"]));
 
 });
 // Копирование файлов

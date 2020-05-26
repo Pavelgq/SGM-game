@@ -1,7 +1,7 @@
 "use strict";
 
-// import Hex from "./lib/hex.js";
-import Point from "./lib/hex.js";
+import Cube from "./lib/cube.js";
+import Point from "./lib/point.js";
 
 
 function hexCorner(center, size, i) {
@@ -10,13 +10,29 @@ function hexCorner(center, size, i) {
   return new Point(center.x + size * Math.cos(angle_rad), center.y + size * Math.sin(angle_rad));
 }
 
+const SIZE = 50;
 
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
-for (let i = 0; i < 10; i++) {
-  ;  
+
+const cube = new Cube(0,0,0);
+
+const start = new Point(500, 500);
+printHex(ctx, start, SIZE);
+
+for (let i = 0; i < 6; i++) {
+  let now = cube.neighbor(i);  
+  let myPoint = cubeToPixel(now, start, SIZE);
+  for (let j = 0; j<6; j++) {
+    let now1 = cube.neighbor(j);  
+    let lol = cubeToPixel(now1, myPoint, SIZE);
+    printHex(ctx, new Point(lol.x, lol.y), SIZE);
+  }
+
+  printHex(ctx, new Point(myPoint.x, myPoint.y), SIZE);
 }
-printHex(ctx, new Point(100, 100), 50);
+//TODO написать класс для всего этого
+//TODO Оставить только контуры шестигранников и сохранить точки в массив
 
 
 function printHex(ctx, center, size) {
@@ -31,3 +47,10 @@ function printHex(ctx, center, size) {
   ctx.fill();
 
 }
+
+function cubeToPixel(now, start, size) {
+  var x = (Math.sqrt(3.0) * now.q + Math.sqrt(3.0) / 2.0 * now.r) * size;
+  var y = ( 3.0 / 2.0 * now.r)*size; 
+  return new Point(x + start.x, y + start.y);
+}
+
