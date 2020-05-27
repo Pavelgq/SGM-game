@@ -2,6 +2,8 @@
 
 import Cube from "./lib/cube.js";
 import Point from "./lib/point.js";
+import Map from "./lib/map.js"
+import Sector from "./lib/sector.js";
 
 
 function hexCorner(center, size, i) {
@@ -15,7 +17,17 @@ const SIZE = 50;
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
+
+
+
 const cube = new Cube(0,0,0);
+
+
+const map = new Map(new Sector(cube, 0),5);
+
+map.getSectors();
+
+console.log(map);
 
 const start = new Point(500, 500);
 printHex(ctx, start, SIZE);

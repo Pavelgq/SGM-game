@@ -1,24 +1,44 @@
+import Sector from "./sector.js";
+
 export default class Map {
 
-  constructor (center, q, size) {
-    this.center = center;
-    this.q = q;
-    this.size = size;
-
-  }
-
   /**
-   * Получение i-ой точки шестиугольника с центром в точке center и размером size
-   * @param {Point} center 
-   * @param {number} size 
-   * @param {number} i 
+   * Создаем карту с центральным сектором и радиусом
    */
-  hexCorner(center, size, i) {
-    let angle_deg = 60 * i + 30;
-    let angle_rad = Math.PI / 180 * angle_deg;
-    return new Point(center.x + size * Math.cos(angle_rad), center.y + size * Math.sin(angle_rad));
+  constructor (sector, rad) {
+    this.sector = sector;
+    this.rad = rad;
+    this.mapData = [sector];
   }
-
-
+  
+  /**
+   * Возвращает массив секторов для карты желаемого радиуса
+   */
+  getSectors() {
+    let mas = this.mapData[0];
+    for (let i = 0; i < this.rad; i++) {
+        let newNeighbors = [];
+        mas.forEach(element => {
+          for (let j = 0; j < 6; j++) {
+            let neighbor = element.cube.neighbor(j)
+            let newSector = new Sector(neighbor, (i+1)+j*this.rad);
+            let metka = false;
+            this.mapData.forEach(element => {
+              if (element.cube.equal(neighbor)) {
+                metka = true;
+              }
+            });
+            if (!metka) {
+              this.mapData.push(newSector);
+              newNeighbors.push(newSector);
+            }
+            
+          }
+        });
+      
+        mas = newNeighbors;
+    }
+    
+  }
 }
 

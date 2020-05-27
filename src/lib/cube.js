@@ -93,6 +93,12 @@ export default class Cube {
     return results;
   }
 
+  equal(b) {
+    if (this.q === b.q && this.r === b.r && this.s === b.s) {
+      return true;
+    }
+    return false;
+  }
   
 }
 
