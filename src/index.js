@@ -30,19 +30,27 @@ map.getSectors();
 console.log(map);
 
 const start = new Point(500, 500);
-printHex(ctx, start, SIZE);
 
-for (let i = 0; i < 6; i++) {
-  let now = cube.neighbor(i);  
-  let myPoint = cubeToPixel(now, start, SIZE);
-  for (let j = 0; j<6; j++) {
-    let now1 = cube.neighbor(j);  
-    let lol = cubeToPixel(now1, myPoint, SIZE);
-    printHex(ctx, new Point(lol.x, lol.y), SIZE);
-  }
+map.mapData.forEach( element => {
 
-  printHex(ctx, new Point(myPoint.x, myPoint.y), SIZE);
-}
+  let lol = cubeToPixel(element.cube, start, SIZE);
+  printHex(ctx, new Point(lol.x, lol.y), SIZE);
+})
+
+
+// printHex(ctx, start, SIZE);
+
+// for (let i = 0; i < 6; i++) {
+//   let now = cube.neighbor(i);  
+//   let myPoint = cubeToPixel(now, start, SIZE);
+//   for (let j = 0; j<6; j++) {
+//     let now1 = cube.neighbor(j);  
+//     let lol = cubeToPixel(now1, myPoint, SIZE);
+//     printHex(ctx, new Point(lol.x, lol.y), SIZE);
+//   }
+
+//   printHex(ctx, new Point(myPoint.x, myPoint.y), SIZE);
+// }
 //TODO написать класс для всего этого
 //TODO Оставить только контуры шестигранников и сохранить точки в массив
 

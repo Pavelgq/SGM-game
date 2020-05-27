@@ -15,7 +15,7 @@ export default class Map {
    * Возвращает массив секторов для карты желаемого радиуса
    */
   getSectors() {
-    let mas = this.mapData[0];
+    let mas =[this.mapData[0]];
     for (let i = 0; i < this.rad; i++) {
         let newNeighbors = [];
         mas.forEach(element => {
@@ -40,5 +40,7 @@ export default class Map {
     }
     
   }
+
+  
 }
 
