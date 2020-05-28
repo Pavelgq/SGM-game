@@ -12,7 +12,7 @@ function hexCorner(center, size, i) {
   return new Point(center.x + size * Math.cos(angle_rad), center.y + size * Math.sin(angle_rad));
 }
 
-const SIZE = 50;
+const SIZE = 20;
 
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
@@ -32,45 +32,48 @@ console.log(map);
 const start = new Point(500, 500);
 
 map.mapData.forEach( element => {
-
-  let lol = cubeToPixel(element.cube, start, SIZE);
-  printHex(ctx, new Point(lol.x, lol.y), SIZE);
+  element.getColor();
+  let color = element.color;
+  let info = '' + element.id;
+  let point = cubeToPixel(element, start, SIZE);
+  printHex(ctx, new Point(point.x, point.y), SIZE, color, info);
 })
 
+function printHex(ctx, center, size, color, info) {
+  
 
-// printHex(ctx, start, SIZE);
-
-// for (let i = 0; i < 6; i++) {
-//   let now = cube.neighbor(i);  
-//   let myPoint = cubeToPixel(now, start, SIZE);
-//   for (let j = 0; j<6; j++) {
-//     let now1 = cube.neighbor(j);  
-//     let lol = cubeToPixel(now1, myPoint, SIZE);
-//     printHex(ctx, new Point(lol.x, lol.y), SIZE);
-//   }
-
-//   printHex(ctx, new Point(myPoint.x, myPoint.y), SIZE);
-// }
-//TODO написать класс для всего этого
-//TODO Оставить только контуры шестигранников и сохранить точки в массив
-
-
-function printHex(ctx, center, size) {
   ctx.beginPath();
   let start = hexCorner(center, size, 0);
   ctx.moveTo(start.x, start.y);
-  for (let i = 1; i < 6; i++) {
+  for (let i = 1; i < 7; i++) {
     let coord = hexCorner(center, size, i);
     ctx.lineTo(coord.x, coord.y);
 
   }
+  
+  ctx.fillStyle = color;
+  ctx.strokeStyle = color;
   ctx.fill();
+
+  //Что-нибудь написать можно так
+  ctx.save();
+  ctx.strokeStyle = "pink";
+  ctx.font = "10px sansserif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.translate(center.x, center.y);
+  ctx.rotate((Math.PI / 180) * 25);
+  ctx.translate(-center.x, -center.y);
+  ctx.strokeText(info, center.x, center.y+10);
+  ctx.restore();
+
 
 }
 
 function cubeToPixel(now, start, size) {
-  var x = (Math.sqrt(3.0) * now.q + Math.sqrt(3.0) / 2.0 * now.r) * size;
-  var y = ( 3.0 / 2.0 * now.r)*size; 
+  let cubeCoord = now.cube;
+  var x = (Math.sqrt(3.0) * cubeCoord.q + Math.sqrt(3.0) / 2.0 * cubeCoord.r) * size;
+  var y = ( 3.0 / 2.0 * cubeCoord.r)*size; 
   return new Point(x + start.x, y + start.y);
 }
 

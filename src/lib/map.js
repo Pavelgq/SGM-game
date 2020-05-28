@@ -1,7 +1,7 @@
 import Sector from "./sector.js";
 
 export default class Map {
-
+  
   /**
    * Создаем карту с центральным сектором и радиусом
    */
@@ -41,6 +41,9 @@ export default class Map {
     
   }
 
+    getId() {
+      //TODO количество вызовов метода
+    }
   
 }
 
