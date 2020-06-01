@@ -1,10 +1,18 @@
 "use strict";
 
+import View from "./lib/view.js"
 import Cube from "./lib/cube.js";
 import Point from "./lib/point.js";
 import Map from "./lib/map.js"
 import Sector from "./lib/sector.js";
 
+const root = document.querySelector(".root");
+
+const view = new View(root, 320, 640);
+
+window.view = view;
+
+view.renderField(1);
 
 function hexCorner(center, size, i) {
   let angle_deg = 60 * i + 30;
@@ -17,11 +25,7 @@ const SIZE = 20;
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
-
-
-
 const cube = new Cube(0,0,0);
-
 
 const map = new Map(new Sector(cube, 0),5);
 

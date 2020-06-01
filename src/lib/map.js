@@ -45,10 +45,7 @@ export default class Map {
     }
     
   }
-
-    getId() {
-      //TODO количество вызовов метода
-    }
+  
   
 }
 
