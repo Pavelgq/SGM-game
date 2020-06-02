@@ -12,7 +12,8 @@ const view = new View(root, 320, 640);
 
 window.view = view;
 
-view.renderField(1);
+let state = {};
+
 
 function hexCorner(center, size, i) {
   let angle_deg = 60 * i + 30;
@@ -27,21 +28,18 @@ var ctx = canvas.getContext('2d');
 
 const cube = new Cube(0,0,0);
 
-const map = new Map(new Sector(cube, 0),5);
-
+const map = new Map(new Sector(cube, 0),4);
 map.getSectors();
+view.renderField(state, 3, map);
+const start = new Point(160, 320);
 
-console.log(map);
-
-const start = new Point(500, 500);
-
-map.mapData.forEach( element => {
-  element.getColor();
-  let color = element.color;
-  let info = '' + element.id;
-  let point = cubeToPixel(element, start, SIZE);
-  printHex(ctx, new Point(point.x, point.y), SIZE, color, info);
-})
+// map.mapData.forEach( element => {
+//   element.getColor();
+//   let color = element.color;
+//   let info = '' + element.id;
+//   let point = cubeToPixel(element, start, SIZE);
+//   printHex(ctx, new Point(point.x, point.y), SIZE, color, info);
+// })
 
 function printHex(ctx, center, size, color, info) {
   
