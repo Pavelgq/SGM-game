@@ -20,7 +20,12 @@ export default class View {
 
     this.element.appendChild(this.canvas);
   }
-
+/**
+ * Рендерит поле по входным данным
+ * @param {Object} state 
+ * @param {Number} key 
+ * @param {Object} map 
+ */
   renderField(state, key, map) {
     
     this.context.clearRect(0, 0, this.width, this.height);
@@ -38,7 +43,7 @@ export default class View {
     this.context.save();
     this.context.lineWidth = 1;
     this.context.strokeStyle = "#333333";
-    this.context.font = "10px sansserif";
+    this.context.font = "10px arial";
     this.context.textAlign = "left";
     this.context.textBaseline = "middle";
     this.context.strokeText(`Дата: ${state.date}`, 20, 20);
@@ -51,8 +56,6 @@ export default class View {
     this.context.strokeText(`Репутация Жуки: ${state.repJ}`, 150, 40);
     this.context.strokeText(`Репутация Индюки: ${state.repI}`, 150, 60);
     this.context.restore();
-    
-    
 
     switch (key) {
       case 1:
@@ -84,15 +87,12 @@ export default class View {
   }
 
   printHex(ctx, center, size, color, info) {
-  
-
     ctx.beginPath();
     let start = this.hexCorner(center, size, 0);
     ctx.moveTo(start.x, start.y);
     for (let i = 1; i < 7; i++) {
       let coord = this.hexCorner(center, size, i);
       ctx.lineTo(coord.x, coord.y);
-  
     }
     
     ctx.fillStyle = color;

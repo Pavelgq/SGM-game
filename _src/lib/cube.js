@@ -1,6 +1,6 @@
 export default class Cube {
 
-  
+
   /**
    * Кубические координаты гексогональной сетки
    * @constructor
@@ -99,7 +99,7 @@ export default class Cube {
     }
     return false;
   }
-  
+
 }
 
 
