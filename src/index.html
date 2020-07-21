@@ -10,49 +10,78 @@
 </head>
 
 <body>
-  <h1>SGM</h1>
-  <header class="header">
-    <section class="header__game game">
-      <table>
-        <thead>
+  <div class="container">
+    <h1 class="visually-hidden">SGM</h1>
+    <header class="header">
+      <section class="header__game game">
+        <div class="game__container">
+          <div class="wrapper">
+            <span class="game__title">Дата:</span>
+            <span class="game__data" id="data">10.12.2212</span>
+          </div>
+          <div class="wrapper">
+            <span class="game__title">Опыт:</span>
+            <span class="game__exp" id="exp">1</span>
+          </div>
+          <div class="wrapper">
+            <span class="game__title">Деньги:</span>
+            <span class="game__money" id="money">17272</span>
+          </div>
+        </div>
+        <div class="game__container">
+          <div class="wrapper">
+            <span class="game__title">Марины:</span>
+            <span class="game__repunanion" id="repM">12</span>
+          </div>
+          <div class="wrapper">
+            <span class="game__title">Жуки:</span>
+            <span class="game__repunanion" id="repG">11</span>
+          </div>
+          <div class="wrapper">
+            <span class="game__title">Индюки:</span>
+            <span class="game__repunanion" id="repI">3</span>
+          </div>
+        </div>
 
-        </thead>
-        <tbody>
 
-        </tbody>
-      </table>
-    </section>
-  </header>
-  <main class="root">
-    <canvas id="canvas"></canvas>
-  </main>
-  <footer class="footer">
-    <nav class="footer__nav nav">
-      <ul class="nav__list">
-        <li class="nav__item">
-          <button type="submit" class="nav__button">
-            <img src="./img/icons/map.svg" alt="Карта" srcset="" class="nav__icon" width="30" height="30"></button>
-        </li>
-        <li class="nav__item">
-          <button type="submit" class="nav__button">
-            <img src="./img/icons/black-hole.svg" alt="Квесты" srcset="" class="nav__icon" width="30" height="30"></button>
-        </li>
-        <li class="nav__item">
-          <button type="submit" class="nav__button">
-            <img src="./img/icons/hangar.svg" alt="Ангар" srcset="" class="nav__icon" width="30" height="30"></button>
-        </li>
-        <li class="nav__item">
-          <button type="submit" class="nav__button">
-            <img src="./img/icons/news.svg" alt="Новости" srcset="" class="nav__icon" width="30" height="30"></button>
-        </li>
-        <li class="nav__item">
-          <button type="submit" class="nav__button">
-            <img src="./img/icons/shop.svg" alt="Магазин" srcset="" class="nav__icon" width="30" height="30">
-          </button>
-        </li>
-      </ul>
-    </nav>
-  </footer>
+
+        <div class="game__run">
+          <marquee>Бегущая строка с новостями</marquee>
+        </div>
+      </section>
+    </header>
+    <main class="root">
+      <canvas id="canvas"></canvas>
+    </main>
+    <footer class="footer">
+      <nav class="footer__nav nav">
+        <ul class="nav__list">
+          <li class="nav__item">
+            <button type="submit" class="nav__button">
+              <img src="./img/icons/map.svg" alt="Карта" srcset="" class="nav__icon" width="30" height="30"></button>
+          </li>
+          <li class="nav__item">
+            <button type="submit" class="nav__button">
+              <img src="./img/icons/black-hole.svg" alt="Квесты" srcset="" class="nav__icon" width="30"
+                height="30"></button>
+          </li>
+          <li class="nav__item">
+            <button type="submit" class="nav__button">
+              <img src="./img/icons/hangar.svg" alt="Ангар" srcset="" class="nav__icon" width="30" height="30"></button>
+          </li>
+          <li class="nav__item">
+            <button type="submit" class="nav__button">
+              <img src="./img/icons/news.svg" alt="Новости" srcset="" class="nav__icon" width="30" height="30"></button>
+          </li>
+          <li class="nav__item">
+            <button type="submit" class="nav__button">
+              <img src="./img/icons/shop.svg" alt="Магазин" srcset="" class="nav__icon" width="30" height="30">
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </footer>
+  </div>
   <script src="./src/index.js" type="module"></script>
 </body>
 
