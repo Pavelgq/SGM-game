@@ -42,16 +42,88 @@
             <span class="game__repunanion" id="repI">3</span>
           </div>
         </div>
-
-
-
         <div class="game__run">
           <marquee>Бегущая строка с новостями</marquee>
         </div>
       </section>
     </header>
     <main class="root">
-      <canvas id="canvas"></canvas>
+      <canvas id="canvas" class="map visually-hidden"></canvas>
+      <section class="quest">
+        <h2 class="quest__start-title">Задания</h2>
+        <ul class="quest__list">
+          <li class="quest__item visually-hidden">
+            <button class="quest__accordion">
+              <h3 class="quest__title">Поставка ${товар} на планету ${планета} сектор ${Сектор}</h3>
+            </button>
+            <div class="quest__panel">
+              <span class="quest__type">Тип: Поставка</span>
+              <p class="quest__description">В связи с ${событие из макрокарты} ${Раса} с планеты ${планета} нуждается в
+                ${товар} и готовы приобрести за ${цена товара} за единицу. Если Вы доставите ${количество товара}, то
+                закроете эту потребность и ${Раса} будут вам очень благодарны.</p>
+              <div class="quest__bonuses conditions">
+                <h4 class="quest__subtitle">Награды</h4>
+                <div class="wrapper"><span>Деньги:</span><span class="conditions__money">345</span></div>
+                <div class="wrapper"><span>Опыт:</span><span class="conditions__exp">23</span></div>
+                <div class="wrapper"><span>Репутация:</span><span class="conditions__rep">Марины -2, Жуки +1</span>
+                </div>
+              </div>
+              <div class="quest__checking conditions">
+                <h4 class="quest__subtitle">Требования</h4>
+                <div class="wrapper"><span>Топливо:</span><span class="conditions__first">120</span></div>
+                <div class="wrapper"><span>Опыт:</span><span class="conditions__second">20</span></div>
+              </div>
+              <div class="wrapper quest__menu">
+                <button>Принять</button>
+                <button>Назад</button>
+              </div>
+
+          </li>
+          <li class="quest__item">
+            <button class="quest__accordion">
+              <h3 class="quest__title">Арест или ликвидация ${имя преступника}</h3>
+            </button>
+            <div class="quest__panel">
+              <span class="quest__type">Тип: Охота за головами</span>
+              <p class="quest__description">${Раса} с планеты ${планета} ${Сектор} просят о поимке или ликвидации
+                отъявленного пирата ${имя преступника} (рейтинг опасности ${сложность}). За голову ${имя преступника}
+                назначена награда в ${деньги}. За поимку или ликвидацию преступника до/за ${Дата или срок} награда будет
+                увеличена. Последний раз ${имя преступника} был замечен в секторе ${Сектор}.
+              </p>
+              <div class="quest__bonuses conditions">
+                <h4 class="quest__subtitle">Награды</h4>
+                <div class="wrapper"><span>Деньги:</span><span class="conditions__money">2823</span></div>
+                <div class="wrapper"><span>Опыт:</span><span class="conditions__exp">322</span></div>
+                <div class="wrapper"><span>Репутация:</span><span class="conditions__rep">Марины +2</span></div>
+              </div>
+              <div class="quest__checking conditions">
+                <h4 class="quest__subtitle">Требования</h4>
+                <div class="wrapper"><span>Свободное место:</span><span class="conditions__first">120</span></div>
+                <div class="wrapper"><span>Опыт:</span><span class="conditions__second">20</span></div>
+                <div class="wrapper"><span>Репутация Марины:</span><span class="conditions__fhirt">62</span></div>
+              </div>
+              <div class="wrapper quest__menu">
+                <button>Принять</button>
+                <button>Назад</button>
+              </div>
+
+          </li>
+          <li class="quest__item">
+            <h3 class="quest__title"></h3>
+            <span class="quest__type"></span>
+            <p class="quest__description"></p>
+          </li>
+        </ul>
+      </section>
+      <section class="hangar visually-hidden">
+
+      </section>
+      <section class="news visually-hidden">
+
+      </section>
+      <section class="shop visually-hidden">
+
+      </section>
     </main>
     <footer class="footer">
       <nav class="footer__nav nav">
