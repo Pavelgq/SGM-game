@@ -61,7 +61,7 @@ gulp.task("uglify", function () {
 
 // Размещение кода в разметке
 gulp.task("html", function () {
-  return gulp.src("src/*.html")
+  return gulp.src("*.html")
     .pipe(posthtml([
       include()
     ]))
@@ -154,7 +154,7 @@ gulp.task("serve", function () {
     ui: false
   });
   gulp.watch('less/**/*.less', gulp.parallel(["style"]));
-  gulp.watch('src/*.html', gulp.parallel(["html"]));
+  gulp.watch('*.html', gulp.parallel(["html"]));
   gulp.watch('build/src/*.html').on('change', server.reload);
   gulp.watch(['src/*.js','src/**/*.js'], gulp.parallel(["uglify"]));
 
