@@ -15,7 +15,7 @@ export default class Cube {
 
 
 
-    if (Math.round(q + r + s) !== 0)
+  if (Math.round(q + r + s) !== 0)
       throw `q + r + s must be 0, was ${q + r + s}`;
   }
 

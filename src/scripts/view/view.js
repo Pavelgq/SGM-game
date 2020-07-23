@@ -11,9 +11,8 @@ export default class View {
   }
 
   createPlayfield() {
-    const cube = new Cube(0, 0, 0);
-
-    const map = new Galaxy(new Sector(cube, 0), 4);
+    
+    const map = new Galaxy();
     map.getSectors();
     this.playfield.renderMap(map);
 

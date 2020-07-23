@@ -29,7 +29,7 @@ export default class Playfield {
   renderMap(map) {
     const start = new Point(this.width / 2, this.height / 2);
 
-    map.mapData.forEach(element => {
+    map.sectors.forEach(element => {
       element.getColor();
       let color = element.color;
       let info = '' + element.id;
