@@ -1,7 +1,7 @@
 /**
  * Функция счетчик вызовов
  */
-export default function makeCounter() {
+ const makeCounter = function makeCounter() {
   var currentCount = 1;
 
   function counter() {
@@ -18,3 +18,13 @@ export default function makeCounter() {
 
   return counter;
 }
+
+const randomNumber = function randomNumber(min, max) {
+  // получить случайное число от (min-0.5) до (max+0.5)
+  let rand = min + Math.random() * (max + 1 - min);
+  return Math.floor(rand);
+}
+export default {
+  makeCounter,
+  randomNumber
+};

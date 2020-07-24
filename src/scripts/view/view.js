@@ -7,14 +7,14 @@ export default class View {
   root = document.querySelector(".root");
   constructor(model) {
     this.model = model;
-    this.playfield = new Playfield(this.root, 320, 400);
+    this.playfield = new Playfield(this.root, 320, 400, this.model.map);
   }
 
   createPlayfield() {
     
-    const map = new Galaxy();
-    map.getSectors();
-    this.playfield.renderMap(map);
+    this.playfield.renderMap();
 
   }
+
+  
 }
