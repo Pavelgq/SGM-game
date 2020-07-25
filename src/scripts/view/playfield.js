@@ -37,7 +37,7 @@ export default class Playfield {
     this.map.sectors.forEach(element => {
       let colorBack;
       if (element.focus) {
-        colorBack = '#eeeeee';
+        colorBack = '#FFFFFF';
       } else {
         colorBack = element.state.backColor;
       }
@@ -45,44 +45,81 @@ export default class Playfield {
       let colorBorder = element.state.borderColor;
       let info = '' + element.id;
 
-      let point = this.cubeToPixel(element.cube, this.start, SIZE);
-      this.printHex(this.context, new Point(point.x, point.y), SIZE, colorBack, colorBorder, info);
+      const point = this.cubeToPixel(element.cube, this.start, SIZE);
+      const start = new Point(point.x, point.y);
+      this.printHex(this.context, element, start, SIZE);
     })
-
+    //TODO: Придумать, что-то чтобы цвет менялся при наведении, как раньше.
+    //TODO: Предлогаю написать еще функцию для рендера большых многогранников.
   }
 
-  printHex(ctx, center, size, colorBack, colorBorder, info) {
+  printHex(ctx, sector, center, size, text) {
+
     ctx.beginPath();
-    let start = this.hexCorner(center, size, 0);
+    let start = this.hexCorner(center, size - 3, 0);
 
     ctx.moveTo(start.x, start.y);
     for (let i = 1; i < 7; i++) {
-      let coord = this.hexCorner(center, size, i);
+      let coord = this.hexCorner(center, size - 3, i);
       ctx.lineTo(coord.x, coord.y);
     }
 
-    ctx.fillStyle = colorBack;
-    ctx.strokeStyle = colorBorder;
-    ctx.lineWidth = 6.0;
+    ctx.fillStyle = sector.state.backColor;
+    ctx.strokeStyle = sector.state.borderColor;
+    ctx.lineWidth = 3.0;
     ctx.stroke();
     ctx.fill();
 
 
 
     //Что-нибудь написать можно так
-    ctx.save();
-    ctx.lineWidth = 1.0;
-    ctx.strokeStyle = "#232323";
-    ctx.font = "10px sansserif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.translate(center.x, center.y);
-    ctx.rotate((Math.PI / 180) * 25);
-    ctx.translate(-center.x, -center.y);
-    ctx.strokeText(info, center.x, center.y + 10);
-    ctx.restore();
+    if (text == undefined) {
+      ctx.save();
+      ctx.lineWidth = 1.0;
+      ctx.strokeStyle = "#555555";
+      ctx.font = "10px sansserif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.translate(center.x, center.y);
+      //ctx.rotate((Math.PI / 180) * 25);
+      ctx.translate(-center.x, -center.y);
+      ctx.strokeText(sector.id, center.x, center.y + 10);
+      ctx.restore();
+
+    } else {
+      text = {
+        "ID": sector.id,
+        "Тип": sector.state.type,
+        "Проживает": sector.state.inmates
+
+      }
+      this.textOnHex(ctx, center, text, "#777777") 
+
+    }
 
 
+  }
+
+  textOnHex(ctx, center, text, color) {
+      ctx.save();
+      ctx.lineWidth = 1.0;
+      ctx.strokeStyle = color;
+      ctx.font = "14px sansserif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.translate(center.x, center.y);
+      //ctx.rotate((Math.PI / 180) * 25);
+      ctx.translate(-center.x, -center.y);
+      let pos = 0;
+      for (const key in text) {
+        if (text.hasOwnProperty(key)) {
+          const element = text[key];
+          ctx.strokeText(`${key}: ${element}`, center.x, center.y + pos);
+          pos+=14;
+        }
+      }
+      
+      ctx.restore();
   }
 
   cubeToPixel(now, start, size) {
@@ -111,13 +148,24 @@ export default class Playfield {
       msg = 'Mouse at: ' + mp.x + ',' + mp.y,
       col = "black";
     let inside;
-    this.map.sectors.forEach(element => {
+    let t;
+    this.map.sectors.some(element => {
       inside = this.isMouseIn(SIZE, 6, element.cube, mp.x, mp.y);
-      this.setFocus(element, inside);
-      
-    });
+      //this.setFocus(element, inside);
+      if (element.focus != inside) {
 
-    // console.log(msg);
+        element.focus = inside;
+        this.renderMap();
+        if (element.focus) {
+          console.log(event, element);
+          clearTimeout(this.timer);
+          this.timer = window.setTimeout(() => {
+            this.printHex(this.context, element, new Point(this.width / 2, this.height / 2), SIZE + 100, {});
+          }, 500);
+          return true;
+        }
+      }
+    });
   }
 
   isMouseIn(rad, side, center, mx, my) {
@@ -130,9 +178,16 @@ export default class Playfield {
   }
 
   setFocus(element, inside) {
+
     if (element.focus != inside) {
+      clearTimeout(this.timer);
       element.focus = inside;
       this.renderMap();
-    } 
+
+
+      // this.timer = setTimeout(() => {
+      //   this.printHex(this.context, new Point(this.width / 2, this.height / 2), SIZE+100, element.state.backColor, element.state.borderColor, element.id);
+      // }, 500);
+    }
   }
 }

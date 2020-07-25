@@ -3,14 +3,14 @@ import func from "../utils/functions.js";
 import Cube from "../map/cube.js"
 
 const {makeCounter} = func;
-
+const   param = {
+  width: 8,
+  heidth: 12,
+  radius: 4
+}
 export default class Galaxy {
 
-  param = {
-    width: 8,
-    heidth: 12,
-    radius: 4
-  }
+
   /**
    * Создаем карту с центральным сектором и радиусом
    */
@@ -29,18 +29,18 @@ export default class Galaxy {
     let counter = makeCounter();
     let counterNow;
 
-    for (let i = 0; i < this.param.heidth; i++) {
+    for (let i = 0; i < param.heidth; i++) {
       let newNeighbors = [];
-      for (let j = 0; j < this.param.width-1; j++) {
+      for (let j = 0; j < param.width-1; j++) {
         counterNow = counter();
-        let neighbor = this.sectors[i*this.param.width+j].cube.neighbor(0);
+        let neighbor = this.sectors[i*param.width+j].cube.neighbor(0);
         let newSector = new Sector(neighbor, counterNow);
         
         this.sectors.push(newSector);
       }
       const odd = i % 2 ? 5:4;
-      if (i != this.param.heidth-1) {
-        this.sectors.push(new Sector(this.sectors[i*this.param.width].cube.neighbor(odd), counter()))
+      if (i != param.heidth-1) {
+        this.sectors.push(new Sector(this.sectors[i*param.width].cube.neighbor(odd), counter()))
       }
 
     }
