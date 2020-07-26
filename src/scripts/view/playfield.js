@@ -53,7 +53,7 @@ export default class Playfield {
     //TODO: Предлогаю написать еще функцию для рендера большых многогранников.
   }
 
-  printHex(ctx, sector, center, size, text) {
+  printHex(ctx, sector, center, size) {
 
     ctx.beginPath();
     let start = this.hexCorner(center, size - 3, 0);
@@ -70,47 +70,61 @@ export default class Playfield {
     ctx.stroke();
     ctx.fill();
 
-
-
-    //Что-нибудь написать можно так
-    if (text == undefined) {
-      ctx.save();
-      ctx.lineWidth = 1.0;
-      ctx.strokeStyle = "#555555";
-      ctx.font = "10px sansserif";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.translate(center.x, center.y);
-      //ctx.rotate((Math.PI / 180) * 25);
-      ctx.translate(-center.x, -center.y);
-      ctx.strokeText(sector.id, center.x, center.y + 10);
-      ctx.restore();
-
-    } else {
-      text = {
-        "ID": sector.id,
-        "Тип": sector.state.type,
-        "Проживает": sector.state.inmates
-
-      }
-      this.textOnHex(ctx, center, text, "#777777") 
-
+    if (sector.position == sector.id) {
+      ctx.beginPath();
+      ctx.fillStyle = "#123456";
+      ctx.rect(center.x-3, center.y-12,6, 6);
+      ctx.fill();
     }
 
 
+    //Что-нибудь написать можно так
+
+      const text = {
+        "ID": sector.id
+      }
+      this.textOnHex(ctx, center, text, "#777777", 10) 
   }
 
-  textOnHex(ctx, center, text, color) {
+  printBigHex(ctx, sector, size) {
+    const center = new Point(this.width / 2, this.height / 2);
+
+    ctx.beginPath();
+    let start = this.hexCorner(center, size, 0);
+
+    ctx.moveTo(start.x, start.y);
+    for (let i = 1; i < 7; i++) {
+      let coord = this.hexCorner(center, size, i);
+      ctx.lineTo(coord.x, coord.y);
+    }
+
+    ctx.fillStyle = sector.state.backColor;
+    ctx.strokeStyle = sector.state.borderColor;
+    ctx.lineWidth = 10.0;
+    ctx.stroke();
+    ctx.fill();
+
+    const text = {
+      "ID": sector.id,
+      "Тип": sector.state.type,
+      "Проживает": sector.state.inmates
+
+    }
+    this.textOnHex(ctx, new Point(this.width / 2, this.height / 3), text, "#777777") 
+  }
+
+  textOnHex(ctx, center, text, color, size) {
       ctx.save();
       ctx.lineWidth = 1.0;
       ctx.strokeStyle = color;
-      ctx.font = "14px sansserif";
+      // ctx.font = `${size}px sansserif`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.translate(center.x, center.y);
       //ctx.rotate((Math.PI / 180) * 25);
       ctx.translate(-center.x, -center.y);
       let pos = 0;
+      //Проверка на объект в переменной text
       for (const key in text) {
         if (text.hasOwnProperty(key)) {
           const element = text[key];
@@ -160,7 +174,7 @@ export default class Playfield {
           console.log(event, element);
           clearTimeout(this.timer);
           this.timer = window.setTimeout(() => {
-            this.printHex(this.context, element, new Point(this.width / 2, this.height / 2), SIZE + 100, {});
+            this.printBigHex(this.context, element, SIZE + 100, {});
           }, 500);
           return true;
         }

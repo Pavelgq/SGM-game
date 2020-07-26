@@ -17,7 +17,9 @@ const MAS_RESOURCES = ['железо', 'руда', 'кварц', 'брилиан
 export default class Sector {
   constructor(cube, id) {
     this.cube = cube;
+    this.neighbors = [];
     this.id = id;
+    this.position = 1;
     this.focus = false;
     this.state = this.generateState();
   }
