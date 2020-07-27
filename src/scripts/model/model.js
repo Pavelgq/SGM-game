@@ -12,6 +12,8 @@ export default class Model {
     createMap() {
         const map = new Galaxy();
         map.getSectors();
+        map.getNeighbor();
+        map.setState();
         console.log(map)
         return map;
     }
