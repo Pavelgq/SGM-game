@@ -1,4 +1,7 @@
 import Point from "../map/point.js";
+import func from '../utils/functions.js';
+
+const {scaleCanvas} = func;
 const SIZE = 20;
 
 
@@ -18,6 +21,9 @@ export default class Playfield {
     this.canvas.width = this.width;
     this.canvas.height = this.height;
     this.context = this.canvas.getContext('2d');
+
+    scaleCanvas(this.canvas, this.context, this.width, this.height);
+    
 
     this.element.appendChild(this.canvas);
 
@@ -116,7 +122,7 @@ export default class Playfield {
     const text = {
       "ID": sector.id,
       "Тип": sector.state.type,
-      "Проживает": sector.state.inmates
+      "Проживает": (sector.inmates == undefined)? 'неизвестно' : sector.inmates.name 
 
     }
     this.textOnHex(ctx, new Point(this.width / 2, this.height / 3), text, "#DD6448") 

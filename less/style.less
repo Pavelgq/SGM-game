@@ -50,7 +50,7 @@ body {
 
 .root {
     width: 320px;
-    height: 400px;
+    height: 450px;
     margin: 5px auto;
     background-color: rgba(238, 238, 238, 0.493);
     border-radius: 5px;
@@ -202,4 +202,28 @@ body {
         }
     }
 
+}
+
+.time-panel {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  background-color: rgba(238, 238, 238, 0.493);
+  &__button {
+    padding: 5px;
+    border: none;
+    background-color: rgba(238, 238, 238, 0.493);
+    border-radius: 5px;
+
+    &:hover {
+      background-color: rosybrown;
+    }
+    &:active {
+        opacity: 0.7;
+    }
+  }
+
+  &__icon {
+
+  }
 }

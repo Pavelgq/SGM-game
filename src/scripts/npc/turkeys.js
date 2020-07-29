@@ -5,7 +5,7 @@ export default class Turkeys extends Creatures {
         super();
         this.name = "Индюки";
         this.description = "Дюк и Инд";
-        this.colors = "#80FF00";
+        this.color = "#689AD3";
         this.sectors = [];
         this.relationship = [];
         this.state = {};

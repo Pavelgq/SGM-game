@@ -6,7 +6,7 @@ export default class Pirates extends Creatures {
         super();
         this.name = "Пираты";
         this.description = "Мы бандито";
-        this.colors = "#80FF00";
+        this.color = "#BF4030";
         this.sectors = [];
         this.relationship = [];
         this.state = {};

@@ -5,7 +5,7 @@ export default class Bugs extends Creatures {
         super();
         this.name = "Жуки";
         this.description = "Летаем и убиваем";
-        this.colors = "#80FF00";
+        this.color = "#80FF00";
         this.sectors = [];
         this.relationship = [];
         this.state = {};

@@ -157,10 +157,13 @@ export default class Galaxy {
    * Заполняем сектора NPC игроками
    * @PARAMS_MAP {Array} Inmates Объекты обитателей секторов
    */
-  setСolonization([...arg]) {
+  setСolonization(creatures) {
     //Здесь будем популяцию создавать
-    arguments.forEach(element => {
+    for (let i = 0; i < creatures.length; i++) {
+      const element = creatures[i];
+      element.colonization(this.sectors);
       
-    })
+    }
+    
   }
 }
