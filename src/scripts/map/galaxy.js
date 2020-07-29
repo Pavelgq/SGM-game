@@ -18,30 +18,29 @@ const PARAMS_MAP = {
   radius: 4
 }
 const QUANT_PLAYERS = 4
-const SECTOR_TYPES = [
-  {
+const SECTOR_TYPES = [{
     type: "заброшенный",
-    color: "#FFBF00",
+    color: "#DDAB48",
     quant: randomNumber(5, 10),
     planets: randomNumber(1, 5),
     resources: 0
   },
   {
     type: "сингулярность",
-    color: "#AAAFFF",
-    quant: randomNumber(1, 3),
+    color: "#6E55DD",
+    quant: randomNumber(2, 4),
     planets: 0,
     resources: 0
   },
   {
     type: "необитаемый",
-    color: "#876ED7",
+    color: "#A7FFE7",
     quant: 99,
     planets: randomNumber(0, 10),
     resources: randomNumber(1, 5)
   }
 ];
-const MAS_RESOURCES = ['железо', 'руда', 'кварц', 'брилианты', 'наноботы', 'еда', 'топливо', 'вода' ];
+const MAS_RESOURCES = ['железо', 'руда', 'кварц', 'брилианты', 'наноботы', 'еда', 'топливо', 'вода'];
 export default class Galaxy {
 
 
@@ -50,7 +49,7 @@ export default class Galaxy {
    */
   constructor() {
     this.sectors = [];
-
+    this.position = 0;
   }
 
   /**
@@ -85,6 +84,7 @@ export default class Galaxy {
    * Получаем для каждого сектора соседние сектора (один раз для удобства)
    */
   getNeighbor() {
+    this.position = randomNumber(0, this.sectors.length-1)
     this.sectors.forEach(element => {
 
       for (let i = 0; i < 6; i++) {
@@ -98,49 +98,47 @@ export default class Galaxy {
       }
     });
   }
-/**
- * Генерируем состояния секторов
- */
+  /**
+   * Генерируем состояния секторов
+   */
   setState() {
-    this.sectors.forEach(element => {
-      let type = '';
+    const mas = [];
+    for (let i = 0; i < this.sectors.length; i++) {
+      mas[i] = i;
+    }
+    SECTOR_TYPES.forEach(element => {
       let quantRes = 0;
       let quantPlanet = 0;
-      
-      while (type == '') {
-        const numType = randomNumber(0, SECTOR_TYPES.length - 1);
-        if (SECTOR_TYPES[numType].quant > 0) {
-          type = SECTOR_TYPES[numType].type;
-          SECTOR_TYPES[numType].quant -= 1;
-          quantRes = SECTOR_TYPES[numType].resources;
-          quantPlanet = SECTOR_TYPES[numType].planets;
-          element.state.backColor = SECTOR_TYPES[numType].color;
-        } 
+      for (let i = 0; i < element.quant; i++) {
+        if (mas.length == 0) {
+          break
+        };
+        const num = randomNumber(0, mas.length-1);
+        this.sectors[mas[num]].state.type = element.type;
+        
+        this.sectors[mas[num]].state.backColor = element.color;
+        quantRes = randomNumber(0, element.resources);
+        quantPlanet = randomNumber(0, element.planets);
+        this.generateResources(this.sectors[mas[num]], quantRes);
+        for (let i = 0; i < quantPlanet; i++) {
+          let name = this.generatePlanets(this.sectors[mas[num]]);
+        }
+        mas.splice(num, 1);
       }
-      element.state.type = type;
-      element.state.resources= [];
-      this.generateResources(element, quantRes);
-      element.state.planets= [];
-
-      for (let i = 0; i < quantPlanet; i++) {
-        let name = this.generatePlanets(element);
-      }
-      
-      let borderColor = "#eeeeee"; //Применим при фокусе сектора
-      
-      
+      console.log(mas.length, element.type);
     });
+    console.log(mas.length);
   }
-
+  
   /**
    * Генерирует планеты для сектора
    * @param {Sector} sector
    */
   generatePlanets(sector) {
-        planetNames.then( function (res) {
-          let num = randomNumber(0, res.length-1);
-          sector.state.planets.push(res[num].name);
-        })
+    planetNames.then(function (res) {
+      let num = randomNumber(0, res.length - 1);
+      sector.state.planets.push(res[num].name);
+    })
   }
 
   /**
@@ -161,5 +159,8 @@ export default class Galaxy {
    */
   setСolonization([...arg]) {
     //Здесь будем популяцию создавать
+    arguments.forEach(element => {
+      
+    })
   }
 }

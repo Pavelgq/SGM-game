@@ -65,16 +65,25 @@ export default class Playfield {
     }
 
     ctx.fillStyle = sector.state.backColor;
-    ctx.strokeStyle = sector.state.borderColor;
-    ctx.lineWidth = 3.0;
+    if (this.map.position == sector.id) {
+      ctx.lineWidth = 7.0;
+      ctx.strokeStyle = "#E66A6A";
+    }else {
+      ctx.lineWidth = 3.0;
+      ctx.strokeStyle = "black";
+    }
+    
+    
+    
     ctx.stroke();
     ctx.fill();
 
-    if (sector.position == sector.id) {
+    if (this.map.position == sector.id) {
       ctx.beginPath();
-      ctx.fillStyle = "#123456";
+      ctx.fillStyle = "#5190DD";
       ctx.rect(center.x-3, center.y-12,6, 6);
       ctx.fill();
+      //выделять крассным
     }
 
 
@@ -83,7 +92,7 @@ export default class Playfield {
       const text = {
         "ID": sector.id
       }
-      this.textOnHex(ctx, center, text, "#777777", 10) 
+      this.textOnHex(ctx, center, text, "#DD6448", 10) 
   }
 
   printBigHex(ctx, sector, size) {
@@ -110,7 +119,7 @@ export default class Playfield {
       "Проживает": sector.state.inmates
 
     }
-    this.textOnHex(ctx, new Point(this.width / 2, this.height / 3), text, "#777777") 
+    this.textOnHex(ctx, new Point(this.width / 2, this.height / 3), text, "#DD6448") 
   }
 
   textOnHex(ctx, center, text, color, size) {
