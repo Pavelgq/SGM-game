@@ -23,10 +23,16 @@ export default class Creatures {
           sectors[num].state.type = 'жилой';
           sectors[num].state.backColor = this.color;
           sectors[num].inmates = this;
-
+          this.sectors.push(sectors[num]);
           quant-=1;
         }
         
       }
+    }
+    /**
+     * Случайные действия npc
+     */
+    changeState() {
+      console.log(`${this.name} на знает, как это сделать`);
     }
 }

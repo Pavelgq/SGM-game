@@ -42,4 +42,13 @@ export default class Model {
     createQuests() {
         this.quests.push(new Quest('доставка', this.map));
     }
+
+    change() {
+     
+
+      for (const key in  this.creatures) {
+          const element =  this.creatures[key];
+          element.changeState();
+      }
+    }
 }

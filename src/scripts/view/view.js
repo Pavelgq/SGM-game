@@ -11,10 +11,8 @@ export default class View {
     this.playfield = new Playfield(root, 320, 400, this.model.map);
   }
 
-  createPlayfield() {
-
+  renderPlayfield() {
     this.playfield.renderMap();
-
   }
 
 

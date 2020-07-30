@@ -40,10 +40,7 @@ export default class Marins extends Creatures {
           let curent = k.neighbors[mas[num]];
           let type = curent.state.type;
           if (type == 'необитаемый') {
-            curent.state.type = 'жилой';
-            curent.state.backColor = this.color;
-            curent.inmates = this;
-
+            this.addSector(curent);
             quant -= 1;
             coloniz.push(curent);
           }
@@ -55,4 +52,29 @@ export default class Marins extends Creatures {
     }
 
   }
+
+
+  changeState() {
+    this.catchRegion();
+  }
+
+  catchRegion() {
+    this.sectors.some(element => {
+      for (let i = 0; i < element.neighbors.length; i++) {
+        if (element.neighbors[i].state.type == 'необитаемый') {
+          this.addSector(element.neighbors[i]);
+          return true;
+        }
+        
+      }
+    })
+  }
+
+  addSector(sector) {
+    sector.state.type = 'жилой';
+    sector.state.backColor = this.color;
+    sector.inmates = this;
+    this.sectors.push(sector);
+  }
+
 }
