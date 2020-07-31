@@ -6,6 +6,7 @@ import Bugs from '../npc/bugs.js';
 import Marins from '../npc/marins.js';
 import Turkeys from '../npc/turkeys.js';
 import Pirates from '../npc/pirates.js';
+import Player from '../player/player.js';
 
 export default class Model {
     constructor() {
@@ -19,6 +20,7 @@ export default class Model {
         this.map = this.createMap();
         this.time = 1;
         this.quests = [];
+        this.player = new Player(this.map.position,this.creatures);
         
     }
 
@@ -44,8 +46,6 @@ export default class Model {
     }
 
     change() {
-     
-
       for (const key in  this.creatures) {
           const element =  this.creatures[key];
           element.changeState();

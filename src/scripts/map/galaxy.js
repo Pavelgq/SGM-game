@@ -34,7 +34,7 @@ const SECTOR_TYPES = [{
   },
   {
     type: "необитаемый",
-    color: "#A7FFE7",
+    color: "#eeeeee",
     quant: 99,
     planets: randomNumber(0, 10),
     resources: randomNumber(1, 5)

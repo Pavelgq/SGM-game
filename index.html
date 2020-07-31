@@ -48,7 +48,16 @@
       </section>
     </header>
     <main class="root">
-      <canvas id="canvas" class="map "></canvas>
+      <div class="playfield--wrapper">
+      <section class="map">
+        <section class="time-panel">
+          <button type="submit" class="time-panel__button" data-index="nextStep">
+            <img src="./img/icons/fast-time.svg" alt="Пропуск хода" srcset="" class="time-panel__icon" width="30" height="30">
+          </button>
+        </section>
+        <canvas id="canvas" class="map_canvas"></canvas>
+      </section>
+      
       <section class="quest visually-hidden">
         <h2 class="quest__start-title">Задания</h2>
         <ul class="quest__list">
@@ -124,34 +133,32 @@
       <section class="shop visually-hidden">
 
       </section>
-      <section class="time-panel">
-        <button type="submit" class="time-panel__button" data-index="nextStep">
-          <img src="./img/icons/fast-time.svg" alt="Пропуск хода" srcset="" class="time-panel__icon" width="30" height="30">
-        </button>
-      </section>
+      </div>
+      
     </main>
     <footer class="footer">
+      
       <nav class="footer__nav nav">
         <ul class="nav__list">
           <li class="nav__item">
-            <button type="submit" class="nav__button">
+            <button type="submit" class="nav__button" data-index="map">
               <img src="./img/icons/map.svg" alt="Карта" srcset="" class="nav__icon" width="30" height="30"></button>
           </li>
           <li class="nav__item">
-            <button type="submit" class="nav__button">
+            <button type="submit" class="nav__button" data-index="quest">
               <img src="./img/icons/black-hole.svg" alt="Квесты" srcset="" class="nav__icon" width="30"
                 height="30"></button>
           </li>
           <li class="nav__item">
-            <button type="submit" class="nav__button">
+            <button type="submit" class="nav__button" data-index="hangar">
               <img src="./img/icons/hangar.svg" alt="Ангар" srcset="" class="nav__icon" width="30" height="30"></button>
           </li>
           <li class="nav__item">
-            <button type="submit" class="nav__button">
+            <button type="submit" class="nav__button" data-index="news">
               <img src="./img/icons/news.svg" alt="Новости" srcset="" class="nav__icon" width="30" height="30"></button>
           </li>
           <li class="nav__item">
-            <button type="submit" class="nav__button">
+            <button type="submit" class="nav__button" data-index="shop">
               <img src="./img/icons/shop.svg" alt="Магазин" srcset="" class="nav__icon" width="30" height="30">
             </button>
           </li>

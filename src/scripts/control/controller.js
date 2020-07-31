@@ -19,7 +19,7 @@ export default class Controller {
 
     this.view.renderPlayfield();
 
-
+    
   }
 
   connectElements(selector, event) {
@@ -29,25 +29,26 @@ export default class Controller {
   }
 
   eventHandler(event) {
-
-    switch (event.target.dataset.index) {
+    let index = event.target.closest('BUTTON').dataset.index;;
+    
+    switch (index) {
       case 'nextStep':
         this.nextStep();
         break;
       case 'map':
-        this.view.showMap();
+        this.view.showPage(index);
         break;
-      case 'quests':
-        this.view.showQuests();
+      case 'quest':
+        this.view.showPage(index);
         break;
       case 'hangar':
-        this.view.showHangar();
+        this.view.showPage(index);
         break;
       case 'news':
-        this.view.showNews();
+        this.view.showPage(index);
         break;
       case 'shop':
-        this.view.showShop();
+        this.view.showPage(index);
         break;
 
       default:

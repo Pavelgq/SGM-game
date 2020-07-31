@@ -95,10 +95,10 @@ export default class Playfield {
 
     //Что-нибудь написать можно так
 
-      const text = {
-        "ID": sector.id
-      }
-      this.textOnHex(ctx, center, text, "#DD6448", 10) 
+      // const text = {
+      //   "ID": sector.id
+      // }
+      // this.textOnHex(ctx, center, text, "#DD6448", 10) 
   }
 
   printBigHex(ctx, sector, size) {
