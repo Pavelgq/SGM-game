@@ -79,7 +79,7 @@ export default class Playfield {
       ctx.strokeStyle = "black";
     }
     
-    
+    ctx.closePath();
     
     ctx.stroke();
     ctx.fill();
@@ -112,10 +112,10 @@ export default class Playfield {
       let coord = this.hexCorner(center, size, i);
       ctx.lineTo(coord.x, coord.y);
     }
-
     ctx.fillStyle = sector.state.backColor;
     ctx.strokeStyle = sector.state.borderColor;
     ctx.lineWidth = 10.0;
+    ctx.closePath();
     ctx.stroke();
     ctx.fill();
 
