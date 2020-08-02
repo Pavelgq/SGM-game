@@ -61,8 +61,23 @@ const scaleCanvas =  function scaleCanvas(canvas, context, width, height) {
   // scale the drawing context so everything will work at the higher ratio
   context.scale(ratio, ratio);
 }
+
+const formatDate = function formatDate(date) {
+
+  var dd = date.getDate();
+  if (dd < 10) dd = '0' + dd;
+
+  var mm = date.getMonth() + 1;
+  if (mm < 10) mm = '0' + mm;
+
+  var yy = date.getFullYear();
+
+  return dd + '.' + mm + '.' + yy;
+}
+
 export default {
   makeCounter,
   randomNumber,
-  scaleCanvas
+  scaleCanvas,
+  formatDate
 };

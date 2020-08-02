@@ -18,7 +18,7 @@ export default class Model {
           pirates: new Pirates()
         };
         this.map = this.createMap();
-        this.time = 1;
+        this.time = new Date(2111, 1, 28);
         this.quests = [];
         this.player = new Player(this.map.position,this.creatures);
         
@@ -42,13 +42,26 @@ export default class Model {
 
 
     createQuests() {
-        this.quests.push(new Quest('доставка', this.map));
+      for (let i = 0; i < 3; i++) {
+        this.quests.push(new Quest('доставка', this));
+        this.quests.push(new Quest('поставка', this));
+      }
+        
     }
 
     change() {
+      this.tickTime();
       for (const key in  this.creatures) {
           const element =  this.creatures[key];
           element.changeState();
       }
     }
+
+    tickTime() {
+      this.time.setDate(this.time.getDate() + 1);
+    }
+
+    // acceptQuest(quest) {
+    //   ;
+    // }
 }

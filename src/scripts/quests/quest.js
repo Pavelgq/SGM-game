@@ -1,7 +1,8 @@
 import system from '../utils/system.js';
 import func from "../utils/functions.js";
 const {
-  randomNumber
+  randomNumber,
+  formatDate
 } = func;
 
 const {
@@ -12,21 +13,44 @@ const planetNames = readFile("./data/planets.json", "planets");
 
 export default class Quest {
 
-  constructor(type, map) {
+  constructor(type, model) {
     this.type = type;
-    this.params = this.generateQuest(map);
+    // this.params = this.generateQuest(map);
+
+    this.name = '';
+    this.terms = {
+      sectorID: 0,
+      player: 0,
+      time: {}
+
+    };
+    this.bonuses = {
+      money: 0,
+      experience: 0,
+      reputation: {},
+    };
+    this.spending = {
+      fuel: 0,
+      money: 0
+    };
+    this.checking = {
+      space: 0,
+      fuel: 0,
+      speed: 0
+    };
+    this.generateQuest(model);
   }
 
-  generateQuest(map) {
+  generateQuest(model) {
     switch (this.type) {
       case 'поставка':
-
+        return this.supplyQuest(model.map, model.creatures, model.time);
         break;
       case 'охота':
 
         break;
       case 'доставка':
-        return this.deliveryQuest(map);
+        return this.deliveryQuest(model.map, model.creatures, model.time);
         break;
       case 'караван':
 
@@ -63,12 +87,14 @@ export default class Quest {
     }
   }
 
-  planetName() {
-    let result = planetNames.then(res => {
-      return res[randomNumber(0, res.length - 1).name]
-    }).catch(err => {
-      console.log(err);
-    })
+  planetName(sector) {
+    if (sector.state.planets.length > 0) {
+      const name = sector.state.planets[randomNumber(0, sector.state.planets.length - 1)];
+      return name;
+    } else {
+      return "Неизвестно";
+    }
+
   }
 
   getReputation(currentPlayer, targetPlayer) {
@@ -94,45 +120,92 @@ export default class Quest {
     }
   }
 
-  deliveryQuest(map) {
-    const terms = {
+  /**
+   * Генерирует квест "доставка"
+   * @param {Object} map 
+   * @param {Object} creatures 
+   * @param {Date} time 
+   */
+  deliveryQuest(map, creatures, time) {
+    const players = Object.keys(creatures);
+
+
+    this.terms = {
       sectorID: this.getSectorID(map.sectors.position, map.sectors.length - 1),
       time: {
         fast: this.getTime(true),
         slow: this.getTime(false)
       },
-      player: randomNumber(1, 3)
+      player: players[randomNumber(0, players.length - 1)]
     };
-    const bonuses = {
-      money: randomNumber(100, 200),
-      exp: randomNumber(50, 100),
-      reputation: {
-        player1: this.getReputation(1, terms.player),
-        player2: this.getReputation(2, terms.player),
-        player3: this.getReputation(3, terms.player)
-      }
-    };
-    const spending = {
-      fuel: 0
-    };
-    const checking = {
-      speed: 0
-    };
-    const type = `Экспресс-доставка`
-    const name = `${type} на ${this.planetName()} сектор ${terms.sectorID}`;
-    // const description = `${Раса} с планеты ${планета} ${Сектор}` +
-    //   `просят в кротчайшие сроки доставить ${предмет_Pдоставки} ` +
-    //   `на ${планета_куда} сектор ${Сектор_куда}. Срок доставки: ` +
-    //   `${Дата_или_срок}, если Вы доставите быстрее ${Дата_или_срок_быстрый}, ` +
-    //   `то награда будет увеличена`;
+    this.bonuses.money = randomNumber(100, 200);
+    this.bonuses.exp = randomNumber(50, 100);
+    for (const key in creatures) {
+      this.bonuses.reputation[key] = this.getReputation(key, this.terms.player);
+    }
 
-    return {
-      terms: terms,
-      bonuses: bonuses,
-      spending: spending,
-      checking: checking,
-      name: name
+    this.spending.fuel = 0;
+    this.checking.speed = 0;
 
+    const currentSector = creatures[this.terms.player].sectors[randomNumber(0, creatures[this.terms.player].sectors.length - 1)];
+    const currentPlanet = this.planetName(currentSector);
+    const targetPlanet = this.planetName(map.sectors[this.terms.sectorID]);
+    let slowDate = new Date(time);
+    let fastDate = new Date(time);
+    slowDate.setDate(time.getDate() + this.terms.time.slow);
+    fastDate.setDate(time.getDate() + this.terms.time.fast);
+
+    this.type = `Экспресс-доставка`
+    this.name = `${this.type} на планету ${targetPlanet} сектор ${this.terms.sectorID}`;
+    this.description = `${creatures[this.terms.player].name} с планеты ${currentPlanet} сектора ${currentSector.id} ` +
+      `просят в кротчайшие сроки доставить какашули ` +
+      `на ${targetPlanet} сектор ${this.terms.sectorID}. Срок доставки: ` +
+      `${formatDate(slowDate)}, если Вы доставите быстрее ${formatDate(fastDate)}, ` +
+      `то награда будет увеличена`;
+  }
+
+  /**
+   * Генерирует квест "поставка"
+   * @param {Object} map 
+   * @param {Object} creatures 
+   * @param {Date} time 
+   */
+  supplyQuest(map, creatures, time) {
+    const players = Object.keys(creatures);
+
+
+    this.terms = {
+      sectorID: this.getSectorID(map.sectors.position, map.sectors.length - 1),
+      time: {
+        fast: this.getTime(true),
+        slow: this.getTime(false)
+      },
+      player: players[randomNumber(0, players.length - 1)]
     };
+    this.bonuses.money = randomNumber(100, 200);
+    this.bonuses.exp = randomNumber(50, 100);
+    for (const key in creatures) {
+      this.bonuses.reputation[key] = this.getReputation(key, this.terms.player);
+    }
+    this.spending.money = randomNumber(10,50); 
+    this.spending.fuel = randomNumber(3,6);
+    this.checking.speed = 0;
+    this.checking.space = randomNumber(1,4);
+
+    const currentSector = creatures[this.terms.player].sectors[randomNumber(0, creatures[this.terms.player].sectors.length - 1)];
+    const currentPlanet = this.planetName(currentSector);
+    const targetPlanet = this.planetName(map.sectors[this.terms.sectorID]);
+    let slowDate = new Date(time);
+    let fastDate = new Date(time);
+    slowDate.setDate(time.getDate() + this.terms.time.slow);
+    fastDate.setDate(time.getDate() + this.terms.time.fast);
+
+    this.type = `Поставка`
+    this.name = `Поставка какашули на планету ${targetPlanet} сектор ${this.terms.sectorID}`;
+    this.description = `В связи с "какое-то событие" `+
+    `${creatures[this.terms.player].name} с планеты ${currentPlanet} нуждается в какашули и готовы приобрести `+
+    `за ${this.spending.money/this.checking.space} за единицу. Если Вы доставите ${this.checking.space}, `+
+    `то закроете эту потребность и ${creatures[this.terms.player].name} будут вам очень благодарны`;
+
   }
 }

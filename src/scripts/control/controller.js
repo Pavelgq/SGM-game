@@ -14,11 +14,13 @@ export default class Controller {
   }
 
   init() {
-    this.model.createQuests();
+    
     console.log(this.model);
 
     this.view.renderPlayfield();
-
+    this.view.renderTime();
+    this.view.renderPlayerState();
+    this.view.renderQuestList();
     
   }
 
@@ -39,6 +41,11 @@ export default class Controller {
         this.view.showPage(index);
         break;
       case 'quest':
+        if (this.model.quests.length == 0) {
+          this.model.createQuests();
+        }
+       
+        this.view.renderQuestList();
         this.view.showPage(index);
         break;
       case 'hangar':
@@ -50,7 +57,10 @@ export default class Controller {
       case 'shop':
         this.view.showPage(index);
         break;
-
+      // case 'accept':
+      //   this.model.createQuests();
+      //   this.view.renderQuestList();
+      //   break;
       default:
         console.log('Что это ты нажал?', event);
         break;
@@ -58,8 +68,10 @@ export default class Controller {
   }
 
   nextStep() {
+
     this.model.change();
     this.view.renderPlayfield();
+    this.view.renderTime();
   }
 
 }

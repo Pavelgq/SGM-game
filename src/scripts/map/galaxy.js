@@ -17,7 +17,7 @@ const PARAMS_MAP = {
   heidth: 12,
   radius: 4
 }
-const QUANT_PLAYERS = 4
+const QUANT_PLAYERS = 4;
 const SECTOR_TYPES = [{
     type: "заброшенный",
     color: "#DDAB48",
@@ -42,8 +42,6 @@ const SECTOR_TYPES = [{
 ];
 const MAS_RESOURCES = ['железо', 'руда', 'кварц', 'брилианты', 'наноботы', 'еда', 'топливо', 'вода'];
 export default class Galaxy {
-
-
   /**
    * Создаем карту с центральным сектором и радиусом
    */
@@ -73,7 +71,7 @@ export default class Galaxy {
       }
       const odd = i % 2 ? 5 : 4;
       if (i != PARAMS_MAP.heidth - 1) {
-        this.sectors.push(new Sector(this.sectors[i * PARAMS_MAP.width].cube.neighbor(odd), counter()))
+        this.sectors.push(new Sector(this.sectors[i * PARAMS_MAP.width].cube.neighbor(odd), counter()));
       }
 
     }
