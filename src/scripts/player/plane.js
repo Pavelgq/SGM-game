@@ -12,6 +12,7 @@ export default class Plane {
   constructor(rang) {
     this.name = this.generateName();
     this.rang = rang;
+    this.distance = 0;
     this.params = {
       fuel: 0,
       attack: 0,

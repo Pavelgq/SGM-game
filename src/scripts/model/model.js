@@ -51,18 +51,38 @@ export default class Model {
         
     }
 
+    acceptQuest(event) {
+      const target = event.target.closest('.quest__item');
+      let id = target.dataset.id;
+
+      const select = target.querySelector('.quest__select--plane');
+      const value = select.options[select.selectedIndex].value;
+      console.log(value);
+      this.player.hangar.planes.some(plane => {
+        if (value == plane.name) {
+          plane.currentQuest = this.quests[id];
+          plane.status = "на задании";
+          let targetCoord = this.map.sectors[plane.currentQuest.terms.sectorID].cube;
+          plane.distance = targetCoord.distance(this.map.sectors[this.map.position].cube)*2;
+          return true;
+        }
+      });
+    }
+
     resetQuest(event) {
       const target = event.target.closest('.quest__item');
-      let id = parseInt(target.id.match(/\d+/));
+      let id = target.dataset.id;
       this.quests[id] = new Quest('поставка', this);
     }
 
     change() {
       this.tickTime();
-      for (const key in  this.creatures) {
-          const element =  this.creatures[key];
-          element.changeState();
-      }
+      
+      // for (const key in  this.creatures) {
+      //     const element =  this.creatures[key];
+      //     element.changeState();
+      // }
+      this.player.changeState(this);
     }
 
     tickTime() {

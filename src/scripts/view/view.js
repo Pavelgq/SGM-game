@@ -127,7 +127,7 @@ export default class View {
     };
 
 
-    let template = `<li class="quest__item" id="quest_${index}">
+    let template = `<li class="quest__item" data-id = "${index}">
     <button class="quest__accordion" >
               <h3 class="quest__title" >${quest.name}</h3>
             </button>
@@ -153,36 +153,34 @@ export default class View {
     </div>`
     }
 
-    template += `<div class="wrapper quest__menu">
-    <button class = "quest__accept">Принять</button>
-    <select class="quest__select quest__select--plane"></select>
-    <button class = "quest__reset">Отказаться</button>
-      </div>
+    if (container != this.questsContainer) {
+      template += `
     </div>
     </li>`;
+    } else {
+      template += `<div class="wrapper quest__menu">
+      <button class = "quest__accept">Принять</button>
+      <select class="quest__select quest__select--plane"></select>
+      <button class = "quest__reset">Отказаться</button>
+        </div>
+      </div>
+      </li>`;
+    }
+    
     //${this.model.acceptQuest(quest)}
 
 
     container.innerHTML += template;
 
     
+    if (container != this.questsContainer) {
+      const item = container.querySelectorAll(`.quest__item`);
+      item.forEach(element => {
+        const button = element.querySelector(".quest__accordion");
+        button.addEventListener('click', this.showQuest);
+      })
+    }
     
-
-    const item = container.querySelectorAll(`.quest__item`);
-    item.forEach(element => {
-      const button = element.querySelector(".quest__accordion");
-      button.addEventListener('click', this.showQuest);
-
-      const accept = element.querySelector(".quest__accept");
-
-      const reset = element.querySelector(".quest__reset");
-      reset.addEventListener('click', this.model.resetQuest);
-
-      const select = element.querySelector(".quest__select--plane");
-      const options = this.renderSelectPlane();
-      select.innerHTML = options;
-    })
-
   }
 
   renderHangar(hangar) {
@@ -227,7 +225,7 @@ export default class View {
     </button>
     <div class="plane__panel--min">
       <div class="wrapper">
-        <span>Статус:</span><span>${plane.status}</span>
+        <span>Статус:</span><span>${plane.status} ${plane.distance?plane.distance:'-'}</span>
         <span>Топливо:</span><span>${plane.state.fuel}(${plane.params.fuel})</span>
         <span>Корпус:</span><span>${plane.state.health}(${plane.params.health})</span>
       </div>
@@ -248,7 +246,7 @@ export default class View {
       </div>
       <div class="plane__quests conditions">
         <h4 class="plane__subtitle">Задания</h4>
-        <div class="wrapper quest-for-${plane.name}">Заданий пока нет..</div>
+        <div class="wrapper quest-for-${plane.name}"></div>
       </div>
     </li>`;
 
@@ -270,7 +268,7 @@ export default class View {
 
 
   renderSelectPlane() {
-    let select = '';
+    let select = `<option value = "0">--</option>`;
 
     for (let i = 0; i < this.model.player.hangar.planes.length; i++) {
       const plane = this.model.player.hangar.planes[i];

@@ -46,17 +46,14 @@
         <div class="game__run">
           <marquee>Бегущая строка с новостями</marquee>
         </div>
+        
       </section>
+      
     </header>
     <main class="root">
       <div class="playfield--wrapper">
         <section class="map">
-          <section class="time-panel">
-            <button type="submit" class="time-panel__button" data-index="nextStep">
-              <img src="./img/icons/fast-time.svg" alt="Пропуск хода" srcset="" class="time-panel__icon" width="30"
-                height="30">
-            </button>
-          </section>
+          
           <canvas id="canvas" class="map_canvas"></canvas>
         </section>
 
@@ -177,7 +174,12 @@
 
     </main>
     <footer class="footer">
-
+      <section class="time-panel">
+        <button type="submit" class="time-panel__button" data-index="nextStep">
+          <img src="./img/icons/fast-time.svg" alt="Пропуск хода" srcset="" class="time-panel__icon" width="30"
+            height="30">
+        </button>
+      </section>
       <nav class="footer__nav nav">
         <ul class="nav__list">
           <li class="nav__item">

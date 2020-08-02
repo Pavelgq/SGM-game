@@ -11,6 +11,7 @@ export default class Controller {
     this.view = view;
 
     this.eventHandler = this.eventHandler.bind(this);
+    this.acceptQuest = this.acceptQuest.bind(this);
     this.resetQuest = this.resetQuest.bind(this);
   }
 
@@ -32,7 +33,7 @@ export default class Controller {
   }
 
   eventHandler(event) {
-    let index = event.target.closest('BUTTON').dataset.index;;
+    let index = event.target.closest('BUTTON').dataset.index;
     
     switch (index) {
       case 'nextStep':
@@ -81,6 +82,9 @@ export default class Controller {
     this.model.change();
     this.view.renderPlayfield();
     this.view.renderTime();
+    this.view.renderPlayerState();
+    this.view.renderHangar(this.model.player.hangar);
+    this.hangarEvents();
   }
 
 
@@ -91,6 +95,7 @@ export default class Controller {
       button.addEventListener('click', this.view.showQuest);
 
       const accept = element.querySelector(".quest__accept");
+      accept.addEventListener('click', this.acceptQuest)
 
       const reset = element.querySelector(".quest__reset");
       reset.addEventListener('click', this.resetQuest);
@@ -99,6 +104,12 @@ export default class Controller {
       const options = this.view.renderSelectPlane();
       select.innerHTML = options;
     })
+  }
+
+  acceptQuest(event) {
+    this.model.acceptQuest(event);
+    this.view.renderQuestList();
+    this.questEvents(this.view.questsContainer);
   }
 
   resetQuest(event) {
