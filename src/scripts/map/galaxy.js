@@ -37,7 +37,7 @@ const SECTOR_TYPES = [{
     color: "#eeeeee",
     quant: 99,
     planets: randomNumber(0, 10),
-    resources: randomNumber(1, 5)
+    resources: randomNumber(3, 10)
   }
 ];
 const MAS_RESOURCES = ['железо', 'руда', 'кварц', 'брилианты', 'наноботы', 'еда', 'топливо', 'вода'];
@@ -115,7 +115,9 @@ export default class Galaxy {
         this.sectors[mas[num]].state.type = element.type;
         
         this.sectors[mas[num]].state.backColor = element.color;
-        quantRes = randomNumber(0, element.resources);
+        
+        quantRes = randomNumber(element.resources?1:0, element.resources);
+        this.sectors[mas[num]].state.quantRes = quantRes;
         quantPlanet = randomNumber(0, element.planets);
         this.generateResources(this.sectors[mas[num]], quantRes);
         for (let i = 0; i < quantPlanet; i++) {

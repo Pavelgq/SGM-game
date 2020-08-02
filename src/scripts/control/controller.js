@@ -11,6 +11,7 @@ export default class Controller {
     this.view = view;
 
     this.eventHandler = this.eventHandler.bind(this);
+    this.resetQuest = this.resetQuest.bind(this);
   }
 
   init() {
@@ -46,9 +47,17 @@ export default class Controller {
         }
        
         this.view.renderQuestList();
+        this.questEvents(this.view.questsContainer);
         this.view.showPage(index);
+
         break;
       case 'hangar':
+        
+          this.view.renderHangar(this.model.player.hangar);
+          this.hangarEvents();
+          // this.questEvents(контэйнер);
+        
+       
         this.view.showPage(index);
         break;
       case 'news':
@@ -74,4 +83,47 @@ export default class Controller {
     this.view.renderTime();
   }
 
+
+  questEvents(container) {
+    const item = container.querySelectorAll(`.quest__item`);
+    item.forEach(element => {
+      const button = element.querySelector(".quest__accordion");
+      button.addEventListener('click', this.view.showQuest);
+
+      const accept = element.querySelector(".quest__accept");
+
+      const reset = element.querySelector(".quest__reset");
+      reset.addEventListener('click', this.resetQuest);
+
+      const select = element.querySelector(".quest__select--plane");
+      const options = this.view.renderSelectPlane();
+      select.innerHTML = options;
+    })
+  }
+
+  resetQuest(event) {
+    this.model.resetQuest(event);
+    this.view.renderQuestList();
+    this.questEvents(this.view.questsContainer);
+  }
+
+  hangarEvents() {
+    this.model.player.hangar.planes.forEach(plane => {
+      let questContainer = this.view.hangarContainer.querySelector(`.quest-for-${plane.name}`);
+      if (Object.keys(plane.currentQuest).length != 0) {
+  
+        this.view.renderQuest(plane.currentQuest, 1, questContainer);
+      } else {
+        questContainer.innerHTML = `Заданий пока нет..`;
+      }
+  
+  
+      
+    });
+    const item = this.view.hangarContainer.querySelectorAll(`.plane`);
+      item.forEach(element => {
+        const button = element.querySelector(".plane__accordion");
+        button.addEventListener('click', this.view.showPlane);
+      });
+  }  
 }

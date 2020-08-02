@@ -4,6 +4,7 @@ export default class Hangar {
     constructor() {
         this.planes = [];
         this.createPlane();
+        this.createPlane();
     }
 
     createPlane() {

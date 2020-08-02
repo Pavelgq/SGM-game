@@ -14,7 +14,12 @@ export default class Marins extends Creatures {
     this.color = "#81B98E";
     this.sectors = [];
     this.relationship = [];
-    this.state = {};
+    this.state = {
+      money: 0,
+      science: randomNumber(0,5),
+      army: 0,
+      economy: 0
+    };
   }
 
   /**

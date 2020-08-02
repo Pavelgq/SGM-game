@@ -122,7 +122,9 @@ export default class Playfield {
     const text = {
       "ID": sector.id,
       "Тип": sector.state.type,
-      "Проживает": (sector.inmates == undefined)? 'неизвестно' : sector.inmates.name 
+      "Проживает": (sector.inmates == undefined)? 'неизвестно' : sector.inmates.name,
+      "Ресурcы": sector.state.quantRes,
+      "Планет": sector.state.planets.length 
 
     }
     this.textOnHex(ctx, new Point(this.width / 2, this.height / 3), text, "#DD6448") 

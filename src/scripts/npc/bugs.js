@@ -14,7 +14,12 @@ export default class Bugs extends Creatures {
         this.color = "#80FF00";
         this.sectors = [];
         this.relationship = [];
-        this.state = {};
+        this.state = {
+          money: 0,
+          science: randomNumber(0,5),
+          army: 0,
+          economy: 0
+        };
     }
 
     /**

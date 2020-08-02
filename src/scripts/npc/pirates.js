@@ -9,6 +9,11 @@ export default class Pirates extends Creatures {
         this.color = "#BF4030";
         this.sectors = [];
         this.relationship = [];
-        this.state = {};
+        this.state = {
+          money: 0,
+          science: 0,
+          army: 0,
+          economy: 0
+        };
     }
 }

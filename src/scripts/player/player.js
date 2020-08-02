@@ -16,7 +16,7 @@ export default class Player {
       money: 0,
     };
     this.relationship = this.setRelationship(creatures);
-
+    
   }
 
   /**

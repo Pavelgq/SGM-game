@@ -22,6 +22,8 @@ export default class Model {
         this.quests = [];
         this.player = new Player(this.map.position,this.creatures);
         
+
+        this.resetQuest = this.resetQuest.bind(this);
     }
 
     createMap() {
@@ -47,6 +49,12 @@ export default class Model {
         this.quests.push(new Quest('поставка', this));
       }
         
+    }
+
+    resetQuest(event) {
+      const target = event.target.closest('.quest__item');
+      let id = parseInt(target.id.match(/\d+/));
+      this.quests[id] = new Quest('поставка', this);
     }
 
     change() {

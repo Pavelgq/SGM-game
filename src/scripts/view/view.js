@@ -19,6 +19,7 @@ export default class View {
     this.time = document.getElementById('date');
 
     this.questsContainer = document.querySelector(".quest__list");
+    this.hangarContainer = document.querySelector(".hangar");
   }
 
   renderPlayfield() {
@@ -75,8 +76,8 @@ export default class View {
     // });
     for (let i = 0; i < this.model.quests.length; i++) {
       const quest = this.model.quests[i];
-      this.renderQuest(quest, i);
-      
+      this.renderQuest(quest, i, this.questsContainer);
+
     }
   }
 
@@ -84,7 +85,7 @@ export default class View {
    * Рендерить переданный квест в развернутом виде
    * @param {Object} quest 
    */
-  renderQuest(quest, index) {
+  renderQuest(quest, index, container) {
 
     //сгенерировать награды
     let bonuses = '';
@@ -153,25 +154,134 @@ export default class View {
     }
 
     template += `<div class="wrapper quest__menu">
-    <button onclick="" data-index="accept">Принять</button>
-    <button onclick="${this.renderQuestList}">Назад</button>
+    <button class = "quest__accept">Принять</button>
+    <select class="quest__select quest__select--plane"></select>
+    <button class = "quest__reset">Отказаться</button>
       </div>
     </div>
     </li>`;
     //${this.model.acceptQuest(quest)}
-    this.questsContainer.innerHTML += template;
-    const item = this.questsContainer.querySelectorAll(`.quest__item`);
+
+
+    container.innerHTML += template;
+
+    
+    
+
+    const item = container.querySelectorAll(`.quest__item`);
     item.forEach(element => {
       const button = element.querySelector(".quest__accordion");
       button.addEventListener('click', this.showQuest);
+
+      const accept = element.querySelector(".quest__accept");
+
+      const reset = element.querySelector(".quest__reset");
+      reset.addEventListener('click', this.model.resetQuest);
+
+      const select = element.querySelector(".quest__select--plane");
+      const options = this.renderSelectPlane();
+      select.innerHTML = options;
     })
+
+  }
+
+  renderHangar(hangar) {
+
+    const template = ` <div class="wrapper">
+    <h2 class="hangar__start-title">Ангар</h2>
+    <span class="hangar__stat--in">Кораблей: </span>
+    <span class="hangar__stat--out">На задании: </span>
+    </div>
+    <ul class="hangar__list">
+      
+    </ul>`
+
+    this.hangarContainer.innerHTML = template;
+
+    let planeIn = this.hangarContainer.querySelector(".hangar__stat--in");
+    let planeOut = this.hangarContainer.querySelector(".hangar__stat--out");
+
+    let targetElement = this.hangarContainer.querySelector(".hangar__list")
+
+    let planesList = '';
+    let inHangar = 0;
+
+    const planes = hangar.planes;
+    for (let i = 0; i < planes.length; i++) {
+      const plane = planes[i];
+      if (plane.status == 'в ангаре') {
+        inHangar += 1;
+      };
+      planesList += this.renderPlane(plane, i, targetElement);
+    }
+
+    planeIn.innerText = `Кораблей: ${inHangar}`;
+    planeOut.innerText = `На задании: ${planes.length-inHangar}`;
+  }
+
+  renderPlane(plane, index, container) {
+
+    const template = `<li class="hangar__item plane">
+    <button class="plane__accordion">
+      <h3 class="plane__title">Корабль: ${plane.name} <span>Ранг ${plane.rang}</span></h3>
+    </button>
+    <div class="plane__panel--min">
+      <div class="wrapper">
+        <span>Статус:</span><span>${plane.status}</span>
+        <span>Топливо:</span><span>${plane.state.fuel}(${plane.params.fuel})</span>
+        <span>Корпус:</span><span>${plane.state.health}(${plane.params.health})</span>
+      </div>
+    </div>
+    <div class="plane__panel visually-hidden">
+      <div class="plane__chars conditions">
+        <h4 class="plane__subtitle">Характеристики</h4>
+        <div class="wrapper"><span class="plane__char">Корпус:</span><span
+            class="c><sptions__health">${plane.state.health}(${plane.params.health})</span><button>Улучшить за 100</button></div>
+        <div class="wrapper"><span class="plane__char">Трюм:</span><span
+            class="conditions__space">${plane.state.space}(${plane.params.space})</span><button>Улучшить за 100</button></div>
+        <div class="wrapper"><span class="plane__char">Топливо:</span><span
+            class="conditions__fuel">${plane.state.fuel}(${plane.params.fuel})</span><button>Улучшить за 100</button></div>
+        <div class="wrapper"><span class="plane__char">Огневая мощь:</span><span
+            class="conditions__attack">${plane.params.attack}</span><button>Улучшить за 100</button></div>
+        <div class="wrapper"><span class="plane__char">Щит:</span><span
+            class="conditions__shield">${plane.params.shield}</span><button>Улучшить за 100</button></div>
+      </div>
+      <div class="plane__quests conditions">
+        <h4 class="plane__subtitle">Задания</h4>
+        <div class="wrapper quest-for-${plane.name}">Заданий пока нет..</div>
+      </div>
+    </li>`;
+
+    container.innerHTML += template;
     
+
   }
 
   showQuest(event) {
-
     const target = event.target.closest(".quest__item");
     target.querySelector(".quest__panel").classList.toggle("visually-hidden");
-    console.log('SHOW')
+  }
+
+  showPlane(event) {
+    const target = event.target.closest(".hangar__item");
+    target.querySelector(".plane__panel").classList.toggle("visually-hidden");
+    // target.querySelector(".plane__panel--min").classList.toggle("visually-hidden");
+  }
+
+
+  renderSelectPlane() {
+    let select = '';
+
+    for (let i = 0; i < this.model.player.hangar.planes.length; i++) {
+      const plane = this.model.player.hangar.planes[i];
+      if (plane.status == 'в ангаре') {
+        select += `
+        <option value = "${plane.name}">Корабль ${plane.name}</option>
+        `
+      }
+
+    }
+
+    return select;
   }
 }

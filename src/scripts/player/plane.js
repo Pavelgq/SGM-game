@@ -11,40 +11,62 @@ export default class Plane {
    */
   constructor(rang) {
     this.name = this.generateName();
-    this.class = rang;
-    this.param = this.generateParams();
-
+    this.rang = rang;
+    this.params = {
+      fuel: 0,
+      attack: 0,
+      shield: 0,
+      space: 0,
+      speed: 0,
+      health: 0
+    };
+    
+    this.status = 'в ангаре';
+    this.currentQuest = {};
+    this.compliteQuests = [];
+    this.fallQuests = [];
+    this.generateParams();
+    this.state = {
+      fuel:this.params.fuel,
+      space:this.params.space,
+      health: this.params.health
+    }
   }
 
   /**
    * Генерирует название корабля
    */
   generateName() {
-    return "Pavel"
+    let chance = new Chance();
+    return chance.first({
+      gender: "female"
+    });
   }
 
   /**
    * Генерирует параметры корабля при инициализации в зависимости от переданного ранга
    */
   generateParams() {
-        let params = {};
     switch (this.rang) {
       case 1:
-        params.fueld = randomNumber(1,10);
-        params.attack = randomNumber(1,4);
-        params.shield = randomNumber(1,4);
-        params.space = randomNumber(1,10);
+        this.params.fuel = randomNumber(1, 10);
+        this.params.attack = randomNumber(1, 4);
+        this.params.shield = randomNumber(1, 4);
+        this.params.space = randomNumber(1, 10);
+        this.params.speed = randomNumber(1, 10);
+        this.params.health = randomNumber(1, 20);
         break;
       case 2:
 
         break;
-      case 1:
+      case 3:
 
         break;
-      case 1:
+
+      case 4:
 
         break;
-      case 1:
+      case 5:
 
         break;
 
@@ -53,6 +75,6 @@ export default class Plane {
     }
 
 
-    return params;
+   
   }
 }
