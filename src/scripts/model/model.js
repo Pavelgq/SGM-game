@@ -1,3 +1,4 @@
+import EventEmitter from '../control/eventEmmiter.js';
 import Galaxy from '../map/galaxy.js';
 import Quest from '../quests/quest.js';
 
@@ -8,8 +9,9 @@ import Turkeys from '../npc/turkeys.js';
 import Pirates from '../npc/pirates.js';
 import Player from '../player/player.js';
 
-export default class Model {
+export default class Model extends EventEmitter {
   constructor() {
+    super();
     this.state = {};
     this.creatures = {
       bugs: new Bugs(),
@@ -25,6 +27,8 @@ export default class Model {
 
     this.resetQuest = this.resetQuest.bind(this);
     this.updatePlane = this.updatePlane.bind(this);
+    this.acceptQuest = this.acceptQuest.bind(this);
+    this.resetQuest = this.resetQuest.bind(this);
   }
 
   createMap() {
@@ -52,10 +56,10 @@ export default class Model {
 
   }
 
-  acceptQuest(event) {
+  acceptQuest({index, event}) {
     const target = event.target.closest('.quest__item');
-    let id = target.dataset.id;
-
+    let id = index;
+    // target.dataset.id
     const select = target.querySelector('.quest__select--plane');
     const value = select.options[select.selectedIndex].value;
     console.log(value);
@@ -70,9 +74,10 @@ export default class Model {
     });
   }
 
-  resetQuest(event) {
-    const target = event.target.closest('.quest__item');
-    let id = target.dataset.id;
+  resetQuest({index, event}) {
+    // const target = event.target.closest('.quest__item');
+    let id = index;
+    // target.dataset.id
     this.quests[id] = new Quest('поставка', this);
   }
 

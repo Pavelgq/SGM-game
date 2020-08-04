@@ -6,8 +6,8 @@ export default class Controller {
     this.view = view;
 
     this.eventHandler = this.eventHandler.bind(this);
-    this.acceptQuest = this.acceptQuest.bind(this);
-    this.resetQuest = this.resetQuest.bind(this);
+    // this.acceptQuest = this.acceptQuest.bind(this);
+    // this.resetQuest = this.resetQuest.bind(this);
   }
 
   init() {
@@ -17,8 +17,10 @@ export default class Controller {
     this.view.renderPlayfield();
     this.view.renderTime();
     this.view.renderPlayerState();
-    this.view.renderQuestList();
+    // this.view.renderQuestList();
 
+    this.view.on('acceptQuest', this.model.acceptQuest);
+    this.view.on('resetQuest', this.model.resetQuest);
   }
 
   connectElements(selector, event) {
@@ -42,8 +44,8 @@ export default class Controller {
           this.model.createQuests();
         }
 
-        this.view.renderQuestList();
-        this.questEvents(this.view.questsContainer);
+        this.view.renderQuestList(this.view.questsContainer, this.model.quests);
+        // this.questEvents(this.view.questsContainer);
         this.view.showPage(index);
 
         break;
@@ -85,43 +87,43 @@ export default class Controller {
    * События на кнопки в каждом квесте
    * @param {Element} container 
    */
-  questEvents(container) {
-    const item = container.querySelectorAll(`.quest__item`);
-    item.forEach(element => {
-      const button = element.querySelector(".quest__accordion");
-      button.addEventListener('click', this.view.showQuest);
+  // questEvents(container) {
+  //   const item = container.querySelectorAll(`.quest__item`);
+  //   item.forEach(element => {
+  //     const button = element.querySelector(".quest__accordion");
+  //     button.addEventListener('click', this.view.showQuest);
 
-      const accept = element.querySelector(".quest__accept");
-      accept.addEventListener('click', this.acceptQuest)
+  //     const accept = element.querySelector(".quest__accept");
+  //     accept.addEventListener('click', this.acceptQuest);
 
-      const reset = element.querySelector(".quest__reset");
-      reset.addEventListener('click', this.resetQuest);
+  //     const reset = element.querySelector(".quest__reset");
+  //     reset.addEventListener('click', this.resetQuest);
 
-      const select = element.querySelector(".quest__select--plane");
-      const options = this.view.renderSelectPlane();
-      select.innerHTML = options;
-    });
-  }
+  //     const select = element.querySelector(".quest__select--plane");
+  //     const options = this.view.renderSelectPlane();
+  //     select.innerHTML = options;
+  //   });
+  // }
 
   /**
    * Действия для выполнения квеста
    * @param {Object} event 
    */
-  acceptQuest(event) {
-    this.model.acceptQuest(event);
-    this.view.renderQuestList();
-    this.questEvents(this.view.questsContainer);
-  }
+  // acceptQuest(event) {
+  //   this.model.acceptQuest(event);
+  //   this.view.renderQuestList(this.view.questContainer, this.model.quests);
+  //   this.questEvents(this.view.questsContainer);
+  // }
 
   /**
    * Действия для перезаписи квеста
    * @param {Object} event 
    */
-  resetQuest(event) {
-    this.model.resetQuest(event);
-    this.view.renderQuestList();
-    this.questEvents(this.view.questsContainer);
-  }
+  // resetQuest(event) {
+  //   this.model.resetQuest(event);
+  //   this.view.renderQuestList(this.view.questContainer, this.model.quests);
+  //   this.questEvents(this.view.questsContainer);
+  // }
 
   /**
    * События на элементы ангара

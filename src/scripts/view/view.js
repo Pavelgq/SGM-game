@@ -1,3 +1,4 @@
+import EventEmitter from '../control/eventEmmiter.js';
 import Cube from '../map/cube.js';
 import Sector from '../map/sector.js';
 import Galaxy from '../map/galaxy.js';
@@ -9,9 +10,10 @@ const {
 } = func;
 
 const root = document.querySelector(".root");
-export default class View {
+export default class View extends EventEmitter {
 
   constructor(model) {
+    super();
     this.model = model;
     this.playfield = new Playfield(root, 320, 400, this.model.map);
 
@@ -22,10 +24,11 @@ export default class View {
     this.hangarContainer = document.querySelector(".hangar");
   }
 
-  renderPlayfield() {
-    this.playfield.renderMap();
-  }
 
+  /**
+   * Показывает страницу, которую запрашивает пользователь
+   * @param {String} className 
+   */
   showPage(className) {
     let canv = document.getElementById('canvas');
     for (let i = 0; i < this.screens.length; i++) {
@@ -47,10 +50,23 @@ export default class View {
     }
   }
 
+  /**
+   * Рендерить поле карты
+   */
+  renderPlayfield() {
+    this.playfield.renderMap();
+  }
+
+  /**
+   * Рендерить время
+   */
   renderTime() {
     this.time.innerText = formatDate(this.model.time);
   }
 
+  /**
+   * Рендерить состояние игрока (верхняя панель)
+   */
   renderPlayerState() {
     document.getElementById('exp').innerText = this.model.player.state.exp;
     document.getElementById('money').innerText = this.model.player.state.money;
@@ -64,39 +80,68 @@ export default class View {
     </div>`;
     });
     container.innerHTML = template;
-
-
   }
 
-  renderQuestList() {
-    this.questsContainer.innerHTML = '';
-
+  /**
+   * Рендерит квесты в свернутом виде
+   */
+  renderQuestList(container, list) {
+    container.innerHTML = '';
     // this.model.quests.forEach(quest => {
     //   this.renderQuest(quest);
     // });
-    for (let i = 0; i < this.model.quests.length; i++) {
-      const quest = this.model.quests[i];
-      this.renderQuest(quest, i, this.questsContainer);
-
+    for (let i = 0; i < list.length; i++) {
+      const quest = list[i];
+      this.renderQuest(quest, i, container);
     }
+    const items = container.querySelectorAll(".quest__item");
+    items.forEach((item, index) => {
+      const button = item.querySelector(".quest__accordion");
+      button.addEventListener('click', this.showQuest);
+
+      if (container == this.questsContainer) {
+        const accept = item.querySelector(".quest__accept");
+        accept.addEventListener('click', (event) => {
+          this.emit('acceptQuest', {
+            index: index,
+            event: event
+          });
+        });
+
+        const reset = item.querySelector(".quest__reset");
+        reset.addEventListener('click', (event) => {
+          this.emit('resetQuest', {
+            index: index,
+            event: event
+          });
+        });
+
+        const select = item.querySelector(".quest__select--plane");
+        const options = this.renderSelectPlane();
+        select.innerHTML = options;
+      }
+    });
+
+
   }
+
 
   /**
    * Рендерить переданный квест в развернутом виде
    * @param {Object} quest 
+   * @param {Number} index 
+   * @param {Element} container 
    */
   renderQuest(quest, index, container) {
 
     //сгенерировать награды
     let bonuses = '';
-
     if (quest.bonuses.money) {
       bonuses += `<div class="wrapper"><span>Деньги:</span><span class="conditions__money">${quest.bonuses.money}</span></div>`;
     };
     if (quest.bonuses.exp) {
       bonuses += `<div class="wrapper"><span>Опыт:</span><span class="conditions__exp">${quest.bonuses.exp}</span></div>`;
     };
-
     for (const key in quest.bonuses.relationship) {
       const element = quest.bonuses.relationship[key];
       if (element) {
@@ -112,7 +157,6 @@ export default class View {
     if (quest.spending.money) {
       spending += `<div class="wrapper"><span>Деньги:</span><span class="conditions__money">${quest.spending.money}</span></div>`;
     };
-
 
     //сгенерировать требования
     let checking = '';
@@ -166,21 +210,7 @@ export default class View {
       </div>
       </li>`;
     }
-    
-    //${this.model.acceptQuest(quest)}
-
-
     container.innerHTML += template;
-
-    
-    if (container != this.questsContainer) {
-      const item = container.querySelectorAll(`.quest__item`);
-      item.forEach(element => {
-        const button = element.querySelector(".quest__accordion");
-        button.addEventListener('click', this.showQuest);
-      })
-    }
-    
   }
 
   renderHangar(hangar) {
@@ -262,7 +292,7 @@ export default class View {
     </li>`;
 
     container.innerHTML += template;
-    
+
 
   }
 
