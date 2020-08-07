@@ -122,7 +122,7 @@ export default class Playfield {
     const text = {
       "ID": sector.id,
       "Тип": sector.state.type,
-      "Проживает": (sector.inmates == undefined)? 'неизвестно' : sector.inmates.name,
+      "Проживает": (Object.keys(sector.inmates).length == 0)? 'пустой' : sector.inmates.name,
       "Ресурcы": sector.state.quantRes,
       "Планет": sector.state.planets.length 
 

@@ -40,6 +40,8 @@ export default class Plane {
       space:this.params.space,
       health: this.params.health
     }
+
+    this.open = false;
   }
 
   /**
@@ -58,7 +60,7 @@ export default class Plane {
   generateParams() {
     switch (this.rang) {
       case 1:
-        this.params.fuel = randomNumber(1, 10);
+        this.params.fuel = randomNumber(6, 12);
         this.params.attack = randomNumber(1, 4);
         this.params.shield = randomNumber(1, 4);
         this.params.space = randomNumber(1, 10);
@@ -66,7 +68,7 @@ export default class Plane {
         this.params.health = randomNumber(1, 20);
         break;
       case 2:
-        this.params.fuel = randomNumber(5, 15);
+        this.params.fuel = randomNumber(8, 15);
         this.params.attack = randomNumber(4, 9);
         this.params.shield = randomNumber(4, 9);
         this.params.space = randomNumber(5, 15);

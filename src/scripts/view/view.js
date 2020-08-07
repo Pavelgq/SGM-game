@@ -22,6 +22,10 @@ export default class View extends EventEmitter {
 
     this.questsContainer = document.querySelector(".quest__list");
     this.hangarContainer = document.querySelector(".hangar");
+
+    this.showQuest = this.showQuest.bind(this);
+    this.showPlane = this.showPlane.bind(this);
+    this.reRenderQuest = this.reRenderQuest.bind(this);
   }
 
 
@@ -120,6 +124,8 @@ export default class View extends EventEmitter {
         const options = this.renderSelectPlane();
         select.innerHTML = options;
       }
+
+      this.on('acceptQuest', this.reRenderQuest);
     });
 
 
@@ -170,12 +176,13 @@ export default class View extends EventEmitter {
       checking += `<div class="wrapper"><span>Скорость:</span><span class="conditions__money">${quest.checking.speed}</span></div>`;
     };
 
+    let opened = quest.open ? '' : 'visually-hidden';
 
     let template = `<li class="quest__item" data-id = "${index}">
     <button class="quest__accordion" >
               <h3 class="quest__title" >${quest.name}</h3>
             </button>
-            <div class="quest__panel visually-hidden">
+            <div class="quest__panel ${opened}">
       <span class="quest__type">Тип: ${quest.type}</span>
       <p class="quest__description">${quest.description}
       </p>
@@ -253,6 +260,9 @@ export default class View extends EventEmitter {
       dis = true;
     }
 
+    let opened = plane.open ? '' : 'visually-hidden';
+
+
     let science = this.model.map.sectors[this.model.map.position].getScience();
 
     const template = `<li class="hangar__item plane">
@@ -266,7 +276,7 @@ export default class View extends EventEmitter {
         <span>Корпус:</span><span>${plane.state.health}(${plane.params.health})</span>
       </div>
     </div>
-    <div class="plane__panel visually-hidden">
+    <div class="plane__panel ${opened}">
       <div class="plane__chars conditions">
         <h4 class="plane__subtitle">Характеристики</h4>
         <div class="wrapper"><span class="plane__char">Корпус:</span><span
@@ -299,12 +309,23 @@ export default class View extends EventEmitter {
   showQuest(event) {
     const target = event.target.closest(".quest__item");
     target.querySelector(".quest__panel").classList.toggle("visually-hidden");
+    this.emit('questState',
+      target.dataset.id
+    );
   }
 
   showPlane(event) {
     const target = event.target.closest(".hangar__item");
+    const planeName = target.querySelector(".plane__accordion").id;
     target.querySelector(".plane__panel").classList.toggle("visually-hidden");
     // target.querySelector(".plane__panel--min").classList.toggle("visually-hidden");
+    this.emit('planeState',
+      planeName
+    );
+  }
+
+  reRenderQuest(event) {
+    this.renderQuestList(this.questsContainer, this.model.quests);
   }
 
 

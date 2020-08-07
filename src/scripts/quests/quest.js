@@ -10,6 +10,7 @@ const {
 } = system
 
 const planetNames = readFile("./data/planets.json", "planets");
+const MAS_RESOURCES = ['железо', 'руда', 'кварц', 'брилианты', 'наноботы', 'еда', 'топливо', 'вода', 'золото', 'дроны','запчасти', 'лекарства', 'боеприпасы'];
 
 export default class Quest {
 
@@ -39,6 +40,9 @@ export default class Quest {
       speed: 0
     };
     this.generateQuest(model);
+
+    this.open = false;
+    this.accept = false;
   }
 
   generateQuest(model) {
@@ -154,12 +158,12 @@ export default class Quest {
     let fastDate = new Date(time);
     slowDate.setDate(time.getDate() + this.terms.time.slow);
     fastDate.setDate(time.getDate() + this.terms.time.fast);
-
+    const resources = MAS_RESOURCES[randomNumber(0,MAS_RESOURCES.length-1)];
     this.type = `Экспресс-доставка`
-    this.name = `${this.type} на планету ${targetPlanet} сектор ${this.terms.sectorID}`;
-    this.description = `${creatures[this.terms.player].name} с планеты ${currentPlanet} сектора ${currentSector.id} ` +
-      `просят в кротчайшие сроки доставить какашули ` +
-      `на ${targetPlanet} сектор ${this.terms.sectorID}. Срок доставки: ` +
+    this.name = `${this.type} на планету <i>${targetPlanet}</i> сектор ${this.terms.sectorID}`;
+    this.description = `${creatures[this.terms.player].name} с планеты <i>${currentPlanet}</i> сектора ${currentSector.id} ` +
+      `просят в кротчайшие сроки доставить <b>${resources}</b> ` +
+      `на <i>${targetPlanet}</i> сектор ${this.terms.sectorID}. Срок доставки: ` +
       `${formatDate(slowDate)}, если Вы доставите быстрее ${formatDate(fastDate)}, ` +
       `то награда будет увеличена`;
   }
@@ -199,11 +203,11 @@ export default class Quest {
     let fastDate = new Date(time);
     slowDate.setDate(time.getDate() + this.terms.time.slow);
     fastDate.setDate(time.getDate() + this.terms.time.fast);
-
+    const resources = MAS_RESOURCES[randomNumber(0,MAS_RESOURCES.length-1)];
     this.type = `Поставка`
-    this.name = `Поставка какашули на планету ${targetPlanet} сектор ${this.terms.sectorID}`;
+    this.name = `Поставка <b>${resources}</b> на планету <i>${targetPlanet}</i> сектор ${this.terms.sectorID}`;
     this.description = `В связи с "какое-то событие" `+
-    `${creatures[this.terms.player].name} с планеты ${currentPlanet} нуждается в какашули и готовы приобрести `+
+    `${creatures[this.terms.player].name} с планеты <i>${currentPlanet}</i> нуждается в <b>${resources}</b> и готовы приобрести `+
     `за ${this.spending.money/this.checking.space} за единицу. Если Вы доставите ${this.checking.space}, `+
     `то закроете эту потребность и ${creatures[this.terms.player].name} будут вам очень благодарны`;
 

@@ -7,6 +7,8 @@ export default class Hangar {
     this.questBuffer = [];
     this.createPlane();
     this.createPlane();
+
+    this.togglePlane = this.togglePlane.bind(this);
   }
 
   createPlane() {
@@ -25,6 +27,15 @@ export default class Hangar {
     return result;
   }
 
+  togglePlane(event) {
+    this.planes.some(plane => {
+      if (plane.name == event) {
+        plane.open = !plane.open;
+        return
+      }
+    })
+  }
+
   changeState() {
     this.planes.forEach(plane => {
       if (plane.status == 'на задании') {
@@ -32,16 +43,16 @@ export default class Hangar {
           plane.state.fuel -= 1;
           plane.distance -= 1;
         } else {
-          if (plane.distance > 0) {
-            plane.fallQuests.push(plane.currentQuest);
+          if (plane.state.fuel > 0) {
+            plane.compliteQuests.push(plane.currentQuest);
+            this.questBuffer.push(plane.currentQuest);
             plane.currentQuest = {};
-            plane.status = 'дрейфует';
+            plane.status = 'в ангаре';
           } else {
-            if (plane.state.fuel > 0) {
-              plane.compliteQuests.push(plane.currentQuest);
-              this.questBuffer.push(plane.currentQuest);
+            if (plane.distance > 0) {
+              plane.fallQuests.push(plane.currentQuest);
               plane.currentQuest = {};
-              plane.status = 'в ангаре';
+              plane.status = 'дрейфует';
             }
           }
 

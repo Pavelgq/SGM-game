@@ -29,6 +29,8 @@ export default class Model extends EventEmitter {
     this.updatePlane = this.updatePlane.bind(this);
     this.acceptQuest = this.acceptQuest.bind(this);
     this.resetQuest = this.resetQuest.bind(this);
+    this.toggleQuest = this.toggleQuest.bind(this);
+    
   }
 
   createMap() {
@@ -65,7 +67,8 @@ export default class Model extends EventEmitter {
     console.log(value);
     this.player.hangar.planes.some(plane => {
       if (value == plane.name) {
-        plane.currentQuest = this.quests[id];
+        plane.currentQuest = JSON.parse(JSON.stringify(this.quests[id]));
+        this.quests.splice(id, 1);
         plane.status = "на задании";
         let targetCoord = this.map.sectors[plane.currentQuest.terms.sectorID].cube;
         plane.distance = targetCoord.distance(this.map.sectors[this.map.position].cube) * 2;
@@ -79,6 +82,10 @@ export default class Model extends EventEmitter {
     let id = index;
     // target.dataset.id
     this.quests[id] = new Quest('поставка', this);
+  }
+
+  toggleQuest(event) {
+    this.quests[event].open = !this.quests[event].open;
   }
 
   change() {

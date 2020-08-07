@@ -21,6 +21,8 @@ export default class Controller {
 
     this.view.on('acceptQuest', this.model.acceptQuest);
     this.view.on('resetQuest', this.model.resetQuest);
+    this.view.on('planeState', this.model.player.hangar.togglePlane);
+    this.view.on('questState', this.model.toggleQuest);
   }
 
   connectElements(selector, event) {
