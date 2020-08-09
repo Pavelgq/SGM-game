@@ -104,9 +104,6 @@ export default class Plane {
       default:
         break;
     }
-
-
-   
   }
 
   upgradeLevel(param, science) {

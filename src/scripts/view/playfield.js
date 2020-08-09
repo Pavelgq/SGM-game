@@ -39,6 +39,15 @@ export default class Playfield {
    * @param {*} map 
    */
   renderMap() {
+    
+    this.context.beginPath();
+    this.context.fillStyle = "sandybrown";
+    this.context.strokeStyle = '#eeeeee'
+    this.context.rect(0, 0, this.width, this.height);
+    this.context.fill();
+    // this.context.lineWidth = 7.0;
+    // this.context.stroke();
+    
 
     this.map.sectors.forEach(element => {
       let colorBack;

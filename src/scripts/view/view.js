@@ -26,6 +26,12 @@ export default class View extends EventEmitter {
     this.showQuest = this.showQuest.bind(this);
     this.showPlane = this.showPlane.bind(this);
     this.reRenderQuest = this.reRenderQuest.bind(this);
+    this.reRenderHangar = this.reRenderHangar.bind(this);
+    this.renderHangar = this.renderHangar.bind(this);
+
+    this.on('acceptQuest', this.reRenderQuest);
+    this.on('resetQuest', this.reRenderQuest);
+    this.on('updatePlane', this.reRenderHangar);
   }
 
 
@@ -50,7 +56,6 @@ export default class View extends EventEmitter {
           canv.style.display = "none";
         }
       }
-
     }
   }
 
@@ -101,7 +106,12 @@ export default class View extends EventEmitter {
     const items = container.querySelectorAll(".quest__item");
     items.forEach((item, index) => {
       const button = item.querySelector(".quest__accordion");
-      button.addEventListener('click', this.showQuest);
+      button.addEventListener('click', (event) => {
+        this.emit('showQuest', {
+          event: event,
+          index: index
+        })
+      });
 
       if (container == this.questsContainer) {
         const accept = item.querySelector(".quest__accept");
@@ -119,16 +129,12 @@ export default class View extends EventEmitter {
             event: event
           });
         });
-
         const select = item.querySelector(".quest__select--plane");
         const options = this.renderSelectPlane();
         select.innerHTML = options;
       }
-
-      this.on('acceptQuest', this.reRenderQuest);
+      // this.on('acceptQuest', this.reRenderQuest);
     });
-
-
   }
 
 
@@ -229,13 +235,12 @@ export default class View extends EventEmitter {
     </div>
     <ul class="hangar__list">
       
-    </ul>`
+    </ul>`;
 
     this.hangarContainer.innerHTML = template;
 
     let planeIn = this.hangarContainer.querySelector(".hangar__stat--in");
     let planeOut = this.hangarContainer.querySelector(".hangar__stat--out");
-
     let targetElement = this.hangarContainer.querySelector(".hangar__list")
 
     let planesList = '';
@@ -249,23 +254,49 @@ export default class View extends EventEmitter {
       };
       planesList += this.renderPlane(plane, i, targetElement);
     }
-
     planeIn.innerText = `Кораблей: ${inHangar}`;
     planeOut.innerText = `На задании: ${planes.length-inHangar}`;
-  }
 
-  renderPlane(plane, index, container) {
-    let dis = false;
-    if (plane.status != 'в ангаре') {
-      dis = true;
+    //TODO: здесь кветы можно рендерить у кораблей
+
+    hangar.planes.forEach(plane => {
+      let questContainer = this.hangarContainer.querySelector(`.quest-for-${plane.name}`);
+      if (Object.keys(plane.currentQuest).length != 0) {
+        this.renderQuest(plane.currentQuest, 1, questContainer);
+      } else {
+        questContainer.innerHTML = `Заданий пока нет..`;
+      }
+    });
+    const item = this.hangarContainer.querySelectorAll(`.plane`);
+    item.forEach(element => {
+        const button = element.querySelector(".plane__accordion");
+        button.addEventListener('click', (event) => {
+          this.emit('showPlane', {
+            event: event,
+          });
+        });
+
+        const updateButtons = element.querySelectorAll(".plane__button");
+        updateButtons.forEach(element => {
+          element.addEventListener('click', (event) => {
+            this.emit('updatePlane', hangar);
+            this.emit('calcPlane', event);
+          });
+        });
+      });
     }
 
-    let opened = plane.open ? '' : 'visually-hidden';
+    renderPlane(plane, index, container) {
+      let dis = false;
+      if (plane.status != 'в ангаре') {
+        dis = true;
+      }
 
+      let opened = plane.open ? '' : 'visually-hidden';
 
-    let science = this.model.map.sectors[this.model.map.position].getScience();
+      let science = this.model.map.sectors[this.model.map.position].getScience();
 
-    const template = `<li class="hangar__item plane">
+      const template = `<li class="hangar__item plane">
     <button class="plane__accordion" id="${plane.name}">
       <h3 class="plane__title">Корабль: ${plane.name} <span>Ранг ${plane.rang}</span></h3>
     </button>
@@ -301,47 +332,55 @@ export default class View extends EventEmitter {
       </div>
     </li>`;
 
-    container.innerHTML += template;
-
-
-  }
-
-  showQuest(event) {
-    const target = event.target.closest(".quest__item");
-    target.querySelector(".quest__panel").classList.toggle("visually-hidden");
-    this.emit('questState',
-      target.dataset.id
-    );
-  }
-
-  showPlane(event) {
-    const target = event.target.closest(".hangar__item");
-    const planeName = target.querySelector(".plane__accordion").id;
-    target.querySelector(".plane__panel").classList.toggle("visually-hidden");
-    // target.querySelector(".plane__panel--min").classList.toggle("visually-hidden");
-    this.emit('planeState',
-      planeName
-    );
-  }
-
-  reRenderQuest(event) {
-    this.renderQuestList(this.questsContainer, this.model.quests);
-  }
-
-
-  renderSelectPlane() {
-    let select = `<option value = "0">--</option>`;
-
-    for (let i = 0; i < this.model.player.hangar.planes.length; i++) {
-      const plane = this.model.player.hangar.planes[i];
-      if (plane.status == 'в ангаре') {
-        select += `
-        <option value = "${plane.name}">Корабль ${plane.name}</option>
-        `
-      }
-
+      container.innerHTML += template;
     }
 
-    return select;
+    showQuest({
+      event,
+      index
+    }) {
+      const target = event.target.closest(".quest__item");
+      target.querySelector(".quest__panel").classList.toggle("visually-hidden");
+      this.model.quests[index].open = !this.model.quests[index].open;
+      // this.emit('questState',
+      //   target.dataset.id
+      // );
+    }
+
+    showPlane({event}) {
+      const target = event.target.closest(".hangar__item");
+      const planeName = target.querySelector(".plane__accordion").id;
+      target.querySelector(".plane__panel").classList.toggle("visually-hidden");
+      // target.querySelector(".plane__panel--min").classList.toggle("visually-hidden");
+      this.model.player.hangar.planes.forEach( plane => {
+        if (plane.name == planeName) {
+          plane.open = !plane.open;
+        }
+      });
+    }
+
+    reRenderQuest(event) {
+      setTimeout(() => {
+        this.renderQuestList(this.questsContainer, this.model.quests);
+      }, 0);
+    }
+    reRenderHangar(event) {
+      setTimeout(() => {
+        this.renderHangar(this.model.player.hangar);
+      }, 0);
+    }
+    
+    renderSelectPlane() {
+      let select = `<option value = "0">--</option>`;
+
+      for (let i = 0; i < this.model.player.hangar.planes.length; i++) {
+        const plane = this.model.player.hangar.planes[i];
+        if (plane.status == 'в ангаре') {
+          select += `
+        <option value = "${plane.name}">Корабль ${plane.name}</option>
+        `
+        }
+      }
+      return select;
+    }
   }
-}

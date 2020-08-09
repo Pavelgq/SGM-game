@@ -2,9 +2,13 @@ import func from '../utils/functions.js';
 
 const {randomNumber} = func;
 
-
-
 export default class Sector {
+   // /**
+  //  * Стэйт включает в себя 
+  //  * тип клетки, соотвецтвенный цвет клетки 
+  //  * ресурсы клетки и их количество (много, средне, мало)
+  //  * принадлежность клетки (раса, необитаемая или пираты)
+  //  */
   constructor(cube, id) {
     this.cube = cube;
     this.neighbors = [];
@@ -26,16 +30,11 @@ export default class Sector {
    */
     getScience() {
       if (Object.keys(this.inmates).length != 0) {
-        return this.inmates.state.science;  
+        return this.inmates.state.science || 0;  
       }
       return 1;
     }
 
-  // /**
-  //  * Стэйт включает в себя 
-  //  * тип клетки, соотвецтвенный цвет клетки 
-  //  * ресурсы клетки и их количество (много, средне, мало)
-  //  * принадлежность клетки (раса, необитаемая или пираты)
-  //  */
+ 
   
 }

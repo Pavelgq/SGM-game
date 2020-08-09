@@ -19,10 +19,15 @@ export default class Controller {
     this.view.renderPlayerState();
     // this.view.renderQuestList();
 
+    this.view.on('showQuest', this.view.showQuest);
+    this.view.on('showPlane', this.view.showPlane);
     this.view.on('acceptQuest', this.model.acceptQuest);
     this.view.on('resetQuest', this.model.resetQuest);
     this.view.on('planeState', this.model.player.hangar.togglePlane);
-    this.view.on('questState', this.model.toggleQuest);
+    this.view.on('calcPlane', this.model.updatePlane)
+
+    document.addEventListener('click', this.view.renderPlayerState);
+    // this.view.on('questState', this.model.toggleQuest);
   }
 
   connectElements(selector, event) {
@@ -54,10 +59,8 @@ export default class Controller {
       case 'hangar':
 
         this.view.renderHangar(this.model.player.hangar);
-        this.hangarEvents();
+        // this.hangarEvents();
         // this.questEvents(контэйнер);
-
-
         this.view.showPage(index);
         break;
       case 'news':
@@ -82,7 +85,7 @@ export default class Controller {
     this.view.renderTime();
     this.view.renderPlayerState();
     this.view.renderHangar(this.model.player.hangar);
-    this.hangarEvents();
+
   }
 
   /**
@@ -130,28 +133,28 @@ export default class Controller {
   /**
    * События на элементы ангара
    */
-  hangarEvents() {
-    this.model.player.hangar.planes.forEach(plane => {
-      let questContainer = this.view.hangarContainer.querySelector(`.quest-for-${plane.name}`);
-      if (Object.keys(plane.currentQuest).length != 0) {
+  // hangarEvents() {
+  //   this.model.player.hangar.planes.forEach(plane => {
+  //     let questContainer = this.view.hangarContainer.querySelector(`.quest-for-${plane.name}`);
+  //     if (Object.keys(plane.currentQuest).length != 0) {
 
-        this.view.renderQuest(plane.currentQuest, 1, questContainer);
-      } else {
-        questContainer.innerHTML = `Заданий пока нет..`;
-      }
-    });
-    const item = this.view.hangarContainer.querySelectorAll(`.plane`);
-    item.forEach(element => {
-      const button = element.querySelector(".plane__accordion");
-      button.addEventListener('click', this.view.showPlane);
+  //       this.view.renderQuest(plane.currentQuest, 1, questContainer);
+  //     } else {
+  //       questContainer.innerHTML = `Заданий пока нет..`;
+  //     }
+  //   });
+  //   const item = this.view.hangarContainer.querySelectorAll(`.plane`);
+  //   item.forEach(element => {
+  //     const button = element.querySelector(".plane__accordion");
+  //     button.addEventListener('click', this.view.showPlane);
 
-      const updateButtons = element.querySelectorAll(".plane__button");
-      updateButtons.forEach( element => {
-        element.addEventListener('click', this.model.updatePlane)
-      });
-    });
+  //     const updateButtons = element.querySelectorAll(".plane__button");
+  //     updateButtons.forEach( element => {
+  //       element.addEventListener('click', this.model.updatePlane)
+  //     });
+  //   });
 
-    this.connectElements(".plane__button", "click");
-  }
+  //   this.connectElements(".plane__button", "click");
+  // }
   
 }

@@ -29,7 +29,7 @@ export default class Model extends EventEmitter {
     this.updatePlane = this.updatePlane.bind(this);
     this.acceptQuest = this.acceptQuest.bind(this);
     this.resetQuest = this.resetQuest.bind(this);
-    this.toggleQuest = this.toggleQuest.bind(this);
+    //this.toggleQuest = this.toggleQuest.bind(this);
     
   }
 
@@ -84,9 +84,9 @@ export default class Model extends EventEmitter {
     this.quests[id] = new Quest('поставка', this);
   }
 
-  toggleQuest(event) {
-    this.quests[event].open = !this.quests[event].open;
-  }
+//   toggleQuest(event) {
+//     this.quests[event].open = !this.quests[event].open;
+//   }
 
   change() {
     this.tickTime();
