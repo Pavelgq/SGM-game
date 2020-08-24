@@ -14,10 +14,10 @@ const MAS_RESOURCES = ['железо', 'руда', 'кварц', 'брилиан
 
 export default class Quest {
 
-  constructor(type, model) {
+  constructor(type, model, index) {
     this.type = type;
     // this.params = this.generateQuest(map);
-
+    this.index = index;
     this.name = '';
     this.terms = {
       sectorID: 0,

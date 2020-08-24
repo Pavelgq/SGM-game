@@ -6,8 +6,7 @@ export default class Controller {
     this.view = view;
 
     this.eventHandler = this.eventHandler.bind(this);
-    // this.acceptQuest = this.acceptQuest.bind(this);
-    // this.resetQuest = this.resetQuest.bind(this);
+    
   }
 
   init() {

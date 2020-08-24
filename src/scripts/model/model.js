@@ -8,10 +8,18 @@ import Marins from '../npc/marins.js';
 import Turkeys from '../npc/turkeys.js';
 import Pirates from '../npc/pirates.js';
 import Player from '../player/player.js';
+import News from '../info/news.js';
+
+import func from "../utils/functions.js";
+
+const {
+  randomNumber
+} = func;
 
 export default class Model extends EventEmitter {
   constructor() {
     super();
+    this.news = new News();
     this.state = {};
     this.creatures = {
       bugs: new Bugs(),
@@ -24,7 +32,7 @@ export default class Model extends EventEmitter {
     this.quests = [];
     this.player = new Player(this.map.position, this.creatures);
 
-
+    
     this.resetQuest = this.resetQuest.bind(this);
     this.updatePlane = this.updatePlane.bind(this);
     this.acceptQuest = this.acceptQuest.bind(this);
@@ -46,16 +54,17 @@ export default class Model extends EventEmitter {
     }
     map.setСolonization(creatures);
     console.log(map);
+    this.news.addNews('Карта создана и заселена');
     return map;
   }
 
 
   createQuests() {
-    for (let i = 0; i < 3; i++) {
-      this.quests.push(new Quest('доставка', this));
-      this.quests.push(new Quest('поставка', this));
+    const types = ['поставка','доставка']
+    for (let i = 0; i < 6; i++) {
+      this.quests.push(new Quest(types[randomNumber(0,1)], this, i));
     }
-
+    this.news.addNews('Созданы новые квесты');
   }
 
   acceptQuest({index, event}) {
@@ -75,6 +84,7 @@ export default class Model extends EventEmitter {
         return true;
       }
     });
+    this.news.addNews('Игрок принял квест');
   }
 
   resetQuest({index, event}) {
@@ -96,6 +106,7 @@ export default class Model extends EventEmitter {
     //     element.changeState();
     // }
     this.player.changeState(this);
+    this.news.addNews('Ход противника');
   }
 
   tickTime() {
