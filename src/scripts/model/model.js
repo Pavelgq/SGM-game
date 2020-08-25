@@ -60,9 +60,9 @@ export default class Model extends EventEmitter {
 
 
   createQuests() {
-    const types = ['поставка','доставка']
+    
     for (let i = 0; i < 6; i++) {
-      this.quests.push(new Quest(types[randomNumber(0,1)], this, i));
+      this.quests.push(new Quest(this.selectQuestType(), this, i));
     }
     this.news.addNews('Созданы новые квесты');
   }
@@ -70,7 +70,6 @@ export default class Model extends EventEmitter {
   acceptQuest({index, event}) {
     const target = event.target.closest('.quest__item');
     let id = index;
-    // target.dataset.id
     const select = target.querySelector('.quest__select--plane');
     const value = select.options[select.selectedIndex].value;
     console.log(value);
@@ -84,19 +83,28 @@ export default class Model extends EventEmitter {
         return true;
       }
     });
-    this.news.addNews('Игрок принял квест');
+    this.news.addNews(`Игрок принял квест ${this.quests[id].name}`);
   }
 
-  resetQuest({index, event}) {
-    // const target = event.target.closest('.quest__item');
+  resetQuest({index}) {
     let id = index;
-    // target.dataset.id
-    this.quests[id] = new Quest('поставка', this);
+    this.quests[id] = new Quest(this.selectQuestType(), this, id);
   }
 
-//   toggleQuest(event) {
-//     this.quests[event].open = !this.quests[event].open;
-//   }
+  checkQuests() {
+    this.quests.forEach(quest => {
+      if(!quest.checkTime(this.time)) {
+        let index = quest.index;
+        this.resetQuest({index});
+        this.news.addNews(`Квест ${this.quests[index].name} теряет актуальность`);
+      }
+    })
+  }
+
+  selectQuestType() {
+    const types = ['поставка','доставка'];
+    return types[randomNumber(0,types.length-1)];
+  }
 
   change() {
     this.tickTime();
@@ -106,7 +114,8 @@ export default class Model extends EventEmitter {
     //     element.changeState();
     // }
     this.player.changeState(this);
-    this.news.addNews('Ход противника');
+    this.checkQuests();
+    this.news.addNews(`Наступает новый день ${this.time.getDate()}`);
   }
 
   tickTime() {

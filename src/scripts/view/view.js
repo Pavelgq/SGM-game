@@ -147,33 +147,12 @@ export default class View extends EventEmitter {
     let questView = new QuestView(quest);
     let template = questView.questInQuests();
     container.innerHTML += template;
-
-    const item = container.querySelector(".quest__item");
-
-    const button = item.querySelector(".quest__accordion");
-    button.addEventListener('click', (event) => {
-      this.emit('showQuest', {
-        event: event,
-        index: quest.index
-      })
-    });
   }
-
   renderQuestPlane(quest, container) {
 
     let questView = new QuestView(quest);
     let template = questView.questInPlaneAction();
     container.innerHTML += template;
-
-    const item = container.querySelector(".quest__item");
-
-    const button = item.querySelector(".quest__accordion");
-    button.addEventListener('click', (event) => {
-      this.emit('showQuest', {
-        event: event,
-        index: quest.index
-      })
-    });
   }
 
   renderHangar(hangar) {

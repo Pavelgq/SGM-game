@@ -16,7 +16,7 @@ export default class Bugs extends Creatures {
         this.relationship = [];
         this.state = {
           money: 0,
-          science: randomNumber(0,5),
+          science: randomNumber(1,5),
           army: 0,
           economy: 0
         };

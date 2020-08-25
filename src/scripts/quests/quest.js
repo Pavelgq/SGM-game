@@ -91,6 +91,13 @@ export default class Quest {
     }
   }
 
+  checkTime(now) {
+    if (now >= this.terms.time.slow) {
+      return false;
+    }
+    return true;
+  }
+
   planetName(sector) {
     if (sector.state.planets.length > 0) {
       const name = sector.state.planets[randomNumber(0, sector.state.planets.length - 1)];
@@ -136,11 +143,8 @@ export default class Quest {
 
     this.terms = {
       sectorID: this.getSectorID(map.sectors.position, map.sectors.length - 1),
-      time: {
-        fast: this.getTime(true),
-        slow: this.getTime(false)
-      },
-      player: players[randomNumber(0, players.length - 1)]
+      player: players[randomNumber(0, players.length - 1)],
+      time: {}
     };
     this.bonuses.money = randomNumber(100, 200);
     this.bonuses.exp = randomNumber(50, 100);
@@ -156,8 +160,10 @@ export default class Quest {
     const targetPlanet = this.planetName(map.sectors[this.terms.sectorID]);
     let slowDate = new Date(time);
     let fastDate = new Date(time);
-    slowDate.setDate(time.getDate() + this.terms.time.slow);
-    fastDate.setDate(time.getDate() + this.terms.time.fast);
+    slowDate.setDate(time.getDate() + this.getTime(false));
+    fastDate.setDate(time.getDate() + this.getTime(true));
+    this.terms.time.fast = fastDate;
+    this.terms.time.slow = slowDate;
     const resources = MAS_RESOURCES[randomNumber(0,MAS_RESOURCES.length-1)];
     this.type = `Экспресс-доставка`
     this.name = `${this.type} на планету <i>${targetPlanet}</i> сектор ${this.terms.sectorID}`;
@@ -181,8 +187,7 @@ export default class Quest {
     this.terms = {
       sectorID: this.getSectorID(map.sectors.position, map.sectors.length - 1),
       time: {
-        fast: this.getTime(true),
-        slow: this.getTime(false)
+        
       },
       player: players[randomNumber(0, players.length - 1)]
     };
@@ -201,8 +206,12 @@ export default class Quest {
     const targetPlanet = this.planetName(map.sectors[this.terms.sectorID]);
     let slowDate = new Date(time);
     let fastDate = new Date(time);
-    slowDate.setDate(time.getDate() + this.terms.time.slow);
-    fastDate.setDate(time.getDate() + this.terms.time.fast);
+    slowDate.setDate(time.getDate() + this.getTime(false));
+    fastDate.setDate(time.getDate() + this.getTime(true));
+    
+    this.terms.time.fast = fastDate;
+    this.terms.time.slow = slowDate;
+
     const resources = MAS_RESOURCES[randomNumber(0,MAS_RESOURCES.length-1)];
     this.type = `Поставка`
     this.name = `Поставка <b>${resources}</b> на планету <i>${targetPlanet}</i> сектор ${this.terms.sectorID}`;

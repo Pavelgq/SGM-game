@@ -16,7 +16,7 @@ export default class Controller {
     this.view.renderPlayfield();
     this.view.renderTime();
     this.view.renderPlayerState();
-    // this.view.renderQuestList();
+    
 
     this.view.on('showQuest', this.view.showQuest);
     this.view.on('showPlane', this.view.showPlane);
@@ -84,7 +84,7 @@ export default class Controller {
     this.view.renderTime();
     this.view.renderPlayerState();
     this.view.renderHangar(this.model.player.hangar);
-
+    this.view.renderQuestList(this.view.questsContainer, this.model.quests);
   }
 
   /**

@@ -118,7 +118,7 @@ export default class Galaxy {
         
         quantRes = randomNumber(element.resources?1:0, element.resources);
         this.sectors[mas[num]].state.quantRes = quantRes;
-        quantPlanet = randomNumber(0, element.planets);
+        quantPlanet = randomNumber(1, element.planets);
         this.generateResources(this.sectors[mas[num]], quantRes);
         for (let i = 0; i < quantPlanet; i++) {
           let name = this.generatePlanets(this.sectors[mas[num]]);
