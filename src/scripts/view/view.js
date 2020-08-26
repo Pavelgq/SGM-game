@@ -13,12 +13,13 @@ const {
 } = func;
 
 const root = document.querySelector(".root");
+const map = document.querySelector(".map");
 export default class View extends EventEmitter {
 
   constructor(model) {
     super();
     this.model = model;
-    this.playfield = new Playfield(root, 320, 400, this.model.map);
+    this.playfield = new Playfield(map, 320, 400, this.model.map);
 
     this.screens = document.querySelector('.playfield--wrapper').children;
     this.time = document.getElementById('date');
@@ -55,9 +56,9 @@ export default class View extends EventEmitter {
         }
       } else {
         this.screens[i].classList.add("visually-hidden");
-        if (className != "map") {
-          canv.style.display = "none";
-        }
+        // if (className != "map") {
+        //   canv.style.display = "none";
+        // }
       }
     }
   }
@@ -105,6 +106,10 @@ export default class View extends EventEmitter {
     }
     const items = container.querySelectorAll(".quest__item");
     items.forEach((item, index) => {
+      let minCanvas = item.querySelector(".quest__panel");
+      let questPlayfield = new Playfield(minCanvas, 125, 150, this.model.map);
+      questPlayfield.renderQuestMap(this.model.quests[index].terms.sectorID);
+
       const button = item.querySelector(".quest__accordion");
       button.addEventListener('click', (event) => {
         this.emit('showQuest', {

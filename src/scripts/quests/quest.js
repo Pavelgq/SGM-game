@@ -65,6 +65,9 @@ export default class Quest {
       case 'извоз':
 
         break;
+      case 'дозаправка': 
+        return this.helpPlaneQuest(model.map, model.hangar.planes, model.time);
+        break;
       default:
         break;
     }
@@ -217,7 +220,7 @@ export default class Quest {
     this.name = `Поставка <b>${resources}</b> на планету <i>${targetPlanet}</i> сектор ${this.terms.sectorID}`;
     this.description = `В связи с "какое-то событие" `+
     `${creatures[this.terms.player].name} с планеты <i>${currentPlanet}</i> нуждается в <b>${resources}</b> и готовы приобрести `+
-    `за ${this.spending.money/this.checking.space} за единицу. Если Вы доставите ${this.checking.space}, `+
+    `за ${Math.round(this.spending.money/this.checking.space)} за единицу. Если Вы доставите ${this.checking.space}, `+
     `то закроете эту потребность и ${creatures[this.terms.player].name} будут вам очень благодарны`;
 
   }

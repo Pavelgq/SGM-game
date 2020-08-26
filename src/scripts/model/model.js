@@ -13,7 +13,8 @@ import News from '../info/news.js';
 import func from "../utils/functions.js";
 
 const {
-  randomNumber
+  randomNumber,
+  formatDate
 } = func;
 
 export default class Model extends EventEmitter {
@@ -80,6 +81,7 @@ export default class Model extends EventEmitter {
         plane.status = "на задании";
         let targetCoord = this.map.sectors[plane.currentQuest.terms.sectorID].cube;
         plane.distance = targetCoord.distance(this.map.sectors[this.map.position].cube) * 2;
+        plane.distance = Math.round(plane.distance / plane.params.speed);
         return true;
       }
     });
@@ -101,6 +103,14 @@ export default class Model extends EventEmitter {
     })
   }
 
+  checkPlanes() {
+    this.hangar.planes.forEach(plane => {
+      if (plane.status == 'дрейфует') {
+        this.quests[this.quests.length] = new Quest("дозаправка", this, this.quests.length);
+      }
+    })
+  }
+
   selectQuestType() {
     const types = ['поставка','доставка'];
     return types[randomNumber(0,types.length-1)];
@@ -115,7 +125,8 @@ export default class Model extends EventEmitter {
     // }
     this.player.changeState(this);
     this.checkQuests();
-    this.news.addNews(`Наступает новый день ${this.time.getDate()}`);
+    this.checkPlanes();
+    this.news.addNews(`Наступает новый день ${formatDate(this.time)}`);
   }
 
   tickTime() {
@@ -133,7 +144,7 @@ export default class Model extends EventEmitter {
     let coast;
     switch (updatePlane) {
       case 'add-fuel':
-        coast = plane.rang*4/science;
+        coast = Math.round(plane.rang*4/science);
         if (money >= coast) {
           if (plane.addFuel()) {
             this.player.state.money -= coast;
@@ -146,7 +157,7 @@ export default class Model extends EventEmitter {
 
         break;
       case 'add-health':
-        coast = plane.levels.health*10/science;
+        coast = Math.round(plane.levels.health*10/science);
         if (money >= coast) {
           
           if (plane.addHealth()) {
@@ -159,7 +170,7 @@ export default class Model extends EventEmitter {
         }
         break;
       default:
-        coast = plane.levels[updatePlane] * 100 / science;
+        coast = Math.round(plane.levels[updatePlane] * 100 / science);
         if (money >= coast) {
           this.player.state.money -= coast;
           plane.upgradeLevel(updatePlane, science);

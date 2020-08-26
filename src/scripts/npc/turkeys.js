@@ -15,7 +15,7 @@ export default class Turkeys extends Creatures {
     this.sectors = [];
     this.relationship = [];
     this.state = {
-      money: 0,
+      money: randomNumber(500,1000),
       science: randomNumber(0,5),
       army: 0,
       economy: 0

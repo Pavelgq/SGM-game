@@ -17,7 +17,9 @@ export default class Playfield {
     this.width = width;
     this.height = height;
 
-    this.canvas = document.getElementById('canvas');
+    // this.canvas = document.getElementById('canvas');
+    this.canvas = document.createElement('CANVAS');
+    this.canvas.id = 'canvas';
     this.canvas.width = this.width;
     this.canvas.height = this.height;
     this.context = this.canvas.getContext('2d');
@@ -66,6 +68,44 @@ export default class Playfield {
     })
     //TODO: Придумать, что-то чтобы цвет менялся при наведении, как раньше.
     //TODO: Предлогаю написать еще функцию для рендера большых многогранников.
+  }
+  /**
+   * Рендерить карту в миниатюре и подсвечивает целевой сектор
+   */
+  renderQuestMap(targetSector) {
+    this.canvas.removeEventListener('mousemove', this.mouseMove);
+  
+    
+    this.context.beginPath();
+    this.context.fillStyle = "sandybrown";
+    this.context.strokeStyle = '#eeeeee'
+    this.context.rect(0, 0, this.width, this.height);
+    this.context.fill();
+    // this.context.lineWidth = 7.0;
+    // this.context.stroke();
+    
+    let startPoint = new Point(this.width / 7, this.height / 16);
+
+    
+
+    this.map.sectors.forEach(element => {
+      let size = 8;
+      let nowSize = 8;
+      let colorBack;
+      if (element.focus) {
+        colorBack = '#FFFFFF';
+      } else {
+        colorBack = element.state.backColor;
+      }
+
+      if (element.id == targetSector) {
+        nowSize = 12;
+      }
+
+      const point = this.cubeToPixel(element.cube, startPoint, size);
+      const start = new Point(point.x, point.y);
+      this.printHex(this.context, element, start, nowSize);
+    })
   }
 
   printHex(ctx, sector, center, size) {

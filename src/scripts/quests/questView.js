@@ -51,6 +51,7 @@ export default class QuestView {
           <span class="quest__type">Тип: ${quest.type}</span>
           <p class="quest__description">${quest.description}
           </p>
+          
           <div class="quest__bonuses conditions">
             <h4 class="quest__subtitle">Награды</h4>
             ${bonuses}
