@@ -36,6 +36,10 @@ export default class Playfield {
     this.canvas.addEventListener('mousemove', this.mouseMove, false);
   }
 
+  printWay(sectorID) {
+    console.log(this.map.buildWay(sectorID));
+  }
+
   /**
    * Рендерит карту на поле
    * @param {*} map 
@@ -86,8 +90,6 @@ export default class Playfield {
     
     let startPoint = new Point(this.width / 7, this.height / 16);
 
-    
-
     this.map.sectors.forEach(element => {
       let size = 8;
       let nowSize = 8;
@@ -101,6 +103,8 @@ export default class Playfield {
       if (element.id == targetSector) {
         nowSize = 12;
       }
+
+      
 
       const point = this.cubeToPixel(element.cube, startPoint, size);
       const start = new Point(point.x, point.y);

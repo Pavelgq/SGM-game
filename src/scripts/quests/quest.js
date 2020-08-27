@@ -224,4 +224,8 @@ export default class Quest {
     `то закроете эту потребность и ${creatures[this.terms.player].name} будут вам очень благодарны`;
 
   }
+
+  helpPlaneQuest(map, plane, time) {
+
+  }
 }

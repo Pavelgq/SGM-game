@@ -1,9 +1,11 @@
 import func from '../utils/functions.js';
 
-const {randomNumber} = func;
+const {
+  randomNumber
+} = func;
 
 export default class Sector {
-   // /**
+  // /**
   //  * Стэйт включает в себя 
   //  * тип клетки, соотвецтвенный цвет клетки 
   //  * ресурсы клетки и их количество (много, средне, мало)
@@ -28,13 +30,23 @@ export default class Sector {
   /**
    * Возвращает науку населяющих планету npc или 1
    */
-    getScience() {
-      if (Object.keys(this.inmates).length != 0) {
-        return this.inmates.state.science || 0;  
-      }
-      return 1;
+  getScience() {
+    if (Object.keys(this.inmates).length != 0) {
+      return this.inmates.state.science || 0;
+    }
+    return 1;
+  }
+
+  isEnemy() {
+    if (Object.keys(this.inmates).length == 0) {
+      return false;
     }
 
- 
-  
+    const npc = this.inmates;
+    if (npc.relationship.player <= 0) {
+      return true;
+    }
+  }
 }
+
+

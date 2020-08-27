@@ -13,7 +13,10 @@ export default class Bugs extends Creatures {
         this.description = "Летаем и убиваем";
         this.color = "#80FF00";
         this.sectors = [];
-        this.relationship = [];
+        this.relationship = {
+          player: randomNumber(-20, 100),
+          
+        };
         this.state = {
           money: randomNumber(500,1000),
           science: randomNumber(1,5),

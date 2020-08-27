@@ -13,7 +13,10 @@ export default class Marins extends Creatures {
     this.description = "Обитатели пустоши";
     this.color = "#81B98E";
     this.sectors = [];
-    this.relationship = [];
+    this.relationship = {
+      player: randomNumber(-20, 100),
+
+    };
     this.state = {
       money: randomNumber(500,1000),
       science: randomNumber(0,5),

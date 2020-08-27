@@ -13,7 +13,10 @@ export default class Turkeys extends Creatures {
     this.description = "Дюк и Инд";
     this.color = "#689AD3";
     this.sectors = [];
-    this.relationship = [];
+    this.relationship = {
+      player: randomNumber(-20, 100),
+      
+    };
     this.state = {
       money: randomNumber(500,1000),
       science: randomNumber(0,5),

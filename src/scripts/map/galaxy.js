@@ -41,6 +41,7 @@ const SECTOR_TYPES = [{
   }
 ];
 const MAS_RESOURCES = ['железо', 'руда', 'кварц', 'брилианты', 'наноботы', 'еда', 'топливо', 'вода', 'золото', 'дроны','запчасти', 'лекарства', 'боеприпасы'];
+
 export default class Galaxy {
   /**
    * Создаем карту с центральным сектором и радиусом
@@ -82,7 +83,12 @@ export default class Galaxy {
    * Получаем для каждого сектора соседние сектора (один раз для удобства)
    */
   getNeighbor() {
-    this.position = randomNumber(0, this.sectors.length-1)
+    while (!this.position) {
+      let myPos = randomNumber(0, this.sectors.length-1);
+      if (this.sectors[myPos].type != 'сингулярность') {
+        this.position = myPos;
+      }
+    }
     this.sectors.forEach(element => {
 
       for (let i = 0; i < 6; i++) {
@@ -165,5 +171,104 @@ export default class Galaxy {
       
     }
     
+  }
+
+  /**
+   * Строит путь от текущей позиции, до целевого сектора
+   * обходя сингулярности и враждебные сектора
+   * возвращает пустой массив, если невозможно добраться
+   * @param {Number} sectorID 
+   */
+  buildWay(sectorID) {
+    const current = {};
+    current.pos = this.sectors[this.position];
+    const target = {};
+    target.pos = this.sectors[sectorID];
+
+    const openSectors = [current];
+    const closedSectors = [];
+    const from = [];
+
+    current.G = 0;
+    current.F = current.G + current.pos.cube.distance(target.pos.cube);
+    let j = 0;
+    while (openSectors.length > 0) {
+      let taken = this.minF(openSectors);
+      if (taken.pos.cube.equal(target.pos.cube)) {
+        return from;
+      }
+      for (let i = 0; i < openSectors.length; i++) {
+        if (openSectors[i].pos.cube.equal(taken.pos.cube)) {
+          closedSectors.push(taken);
+          openSectors.splice(i,1);
+        }
+      }
+      let neighbors = this.getNear(taken, closedSectors);
+      neighbors.forEach(neighbor => {
+        let tempG = taken.G + taken.pos.cube.distance(neighbor.pos.cube);
+        if (!this.inOpen(neighbor, openSectors) || tempG < neighbor.G) {
+            from[j] = taken;
+            neighbor.G = tempG;
+            neighbor.F = neighbor.G + neighbor.pos.cube.distance(target.pos.cube);
+            if (!this.inOpen(neighbor, openSectors)) {
+              openSectors.push(neighbor);
+            }
+        }
+      })
+      j+=1;
+      neighbors = []
+    }
+    return 0;
+  }
+
+  inOpen(taken, openSectors) {
+      for (let i = 0; i < openSectors.length; i++) {
+        const sector = openSectors[i];
+        if (taken.pos.cube.equal(sector.pos.cube)) {
+          taken.G = sector.G;
+          taken.F = sector.F;
+          return true;
+        }
+      }
+      return false;
+  }
+
+  minF(openSectors) {
+    let min = Infinity;
+    let index = 0;
+    for (let i = 0; i < openSectors.length; i++) {
+      if (openSectors[i].F <= min) {
+        min = openSectors[i].F;
+        index = i;
+      }
+    }
+    return openSectors[index];
+  }
+
+  getNear(taken, closedSectors) {
+    let result = [];
+    
+      for (let i = 0; i < taken.pos.neighbors.length; i++) {
+        let metka = false;
+        const neighbor = taken.pos.neighbors[i];
+        // (sector.type == 'сингулярность' || sector.isEnemy())
+        
+        closedSectors.forEach(sector => {
+          if (neighbor.cube.equal(sector.pos.cube)) { 
+            metka = true;
+          }
+        });
+        
+
+        if (!metka && neighbor.state.type != 'сингулярность' && !neighbor.isEnemy()) {
+          let current = {};
+          current.pos = neighbor;
+          current.G = 0;
+          current.F = 0;
+          result.push(current);
+        }
+      }
+    
+    return result;
   }
 }

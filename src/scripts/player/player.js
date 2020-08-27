@@ -26,7 +26,7 @@ export default class Player {
   setRelationship(creatures) {
     let result = {};
     for (const key in creatures) {
-      result[key] = randomNumber(0, 10);
+      result[key] = creatures[key].relationship.player;
     }
     return result;
   }
