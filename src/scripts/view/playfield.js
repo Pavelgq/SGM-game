@@ -89,9 +89,9 @@ export default class Playfield {
     // this.context.stroke();
     
     let startPoint = new Point(this.width / 7, this.height / 16);
-
+    let size = 8;
+    
     this.map.sectors.forEach(element => {
-      let size = 8;
       let nowSize = 8;
       let colorBack;
       if (element.focus) {
@@ -104,12 +104,30 @@ export default class Playfield {
         nowSize = 12;
       }
 
-      
-
       const point = this.cubeToPixel(element.cube, startPoint, size);
       const start = new Point(point.x, point.y);
       this.printHex(this.context, element, start, nowSize);
     })
+
+    
+    const way = this.map.buildWay(targetSector);
+    this.context.beginPath();
+    this.context.fillStyle = "sandybrown";
+    this.context.strokeStyle = 'black'
+    const beginPoint = this.cubeToPixel(this.map.sectors[this.map.position].cube, startPoint, size);
+    this.context.moveTo(beginPoint.x, beginPoint.y); 
+    if (way) {
+      way.forEach(sector => {
+
+        const point = this.cubeToPixel(sector.cube, startPoint, size);
+  
+        this.context.lineTo(point.x,point.y)
+        this.context.stroke();
+      });
+    }
+   
+
+    this.context.closePath();
   }
 
   printHex(ctx, sector, center, size) {

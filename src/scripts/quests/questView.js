@@ -49,7 +49,9 @@ export default class QuestView {
                 </button>
                 <div class="quest__panel ${opened}">
           <span class="quest__type">Тип: ${quest.type}</span>
-          <p class="quest__description">${quest.description}
+          <div class = "quest__about">
+            <p class="quest__description">${quest.description}
+          </div>
           </p>
           
           <div class="quest__bonuses conditions">

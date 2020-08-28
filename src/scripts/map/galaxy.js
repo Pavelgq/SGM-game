@@ -195,6 +195,7 @@ export default class Galaxy {
     while (openSectors.length > 0) {
       let taken = this.minF(openSectors);
       if (taken.pos.cube.equal(target.pos.cube)) {
+        from.push(target.pos);
         return from;
       }
       for (let i = 0; i < openSectors.length; i++) {
@@ -207,7 +208,7 @@ export default class Galaxy {
       neighbors.forEach(neighbor => {
         let tempG = taken.G + taken.pos.cube.distance(neighbor.pos.cube);
         if (!this.inOpen(neighbor, openSectors) || tempG < neighbor.G) {
-            from[j] = taken;
+            from[j] = taken.pos;
             neighbor.G = tempG;
             neighbor.F = neighbor.G + neighbor.pos.cube.distance(target.pos.cube);
             if (!this.inOpen(neighbor, openSectors)) {

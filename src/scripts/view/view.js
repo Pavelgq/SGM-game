@@ -106,7 +106,7 @@ export default class View extends EventEmitter {
     }
     const items = container.querySelectorAll(".quest__item");
     items.forEach((item, index) => {
-      let minCanvas = item.querySelector(".quest__panel");
+      let minCanvas = item.querySelector(".quest__about");
       let questPlayfield = new Playfield(minCanvas, 125, 150, this.model.map);
       questPlayfield.renderQuestMap(this.model.quests[index].terms.sectorID);
       console.log(this.model.map.buildWay(this.model.quests[index].terms.sectorID));
