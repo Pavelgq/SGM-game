@@ -114,7 +114,7 @@ export default class View extends EventEmitter {
       const button = item.querySelector(".quest__accordion");
       button.addEventListener('click', (event) => {
         this.emit('showQuest', {
-          event: event,
+          event: event, 
           index: index
         })
       });

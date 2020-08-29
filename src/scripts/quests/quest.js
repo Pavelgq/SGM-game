@@ -10,13 +10,11 @@ const {
 } = system
 
 const planetNames = readFile("./data/planets.json", "planets");
-const MAS_RESOURCES = ['железо', 'руда', 'кварц', 'брилианты', 'наноботы', 'еда', 'топливо', 'вода', 'золото', 'дроны','запчасти', 'лекарства', 'боеприпасы'];
-
 export default class Quest {
-
-  constructor(type, model, index) {
-    this.type = type;
-    // this.params = this.generateQuest(map);
+  
+  constructor(model, index) {
+    this.type = '';
+    this.model = model;
     this.index = index;
     this.name = '';
     this.terms = {
@@ -41,8 +39,15 @@ export default class Quest {
     };
     this.generateQuest(model);
 
-    this.open = false;
-    this.accept = false;
+    this.way = [];
+
+    this.open = false; //свернут или разсернут
+    this.accept = false; //выполнен или нет
+    this.reach = true; //возможно ли добраться чтобы выполнить
+
+    this.MAS_RESOURCES = ['железо', 'руда', 'кварц', 'брилианты', 'наноботы', 'еда', 'топливо', 'вода', 'золото', 'дроны','запчасти', 'лекарства', 'боеприпасы'];
+
+
   }
 
   generateQuest(model) {

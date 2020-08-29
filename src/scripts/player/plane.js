@@ -42,6 +42,8 @@ export default class Plane {
     }
 
     this.open = false;
+
+    this.liveSupport = 5;
   }
 
   /**

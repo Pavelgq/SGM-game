@@ -1,9 +1,17 @@
-import Quest from "./quest";
+import Quest from "./quest.js";
+
+import func from "../utils/functions.js";
+
+const {
+  randomNumber,
+  formatDate
+} = func;
+
 
 export default class SupplyQuest extends Quest {
 
-  constructor() {
-    super();
+  constructor(model, index) {
+    super(model, index);
     this.type = 'поставка';
 
   }
@@ -19,6 +27,14 @@ export default class SupplyQuest extends Quest {
       player: players[randomNumber(0, players.length - 1)],
       time: {}
     };
+
+    this.way = [];
+    this.way = map.buildWay(this.terms.sectorID);
+    if (!this.way.length) {
+      this.reach = false;
+    } else {
+      this.reach = true;
+    }
 
     const bank = creatures[this.terms.player].state.money;
     const science = creatures[this.terms.player].state.science;
@@ -46,7 +62,7 @@ export default class SupplyQuest extends Quest {
     this.terms.time.fast = fastDate;
     this.terms.time.slow = slowDate;
 
-    const resources = MAS_RESOURCES[randomNumber(0, MAS_RESOURCES.length - 1)];
+    const resources = this.MAS_RESOURCES[randomNumber(0, this.MAS_RESOURCES.length - 1)];
 
     this.name = `Поставка <b>${resources}</b> на планету <i>${targetPlanet}</i> сектор ${this.terms.sectorID}`;
     this.description = `В связи с "какое-то событие" ` +
@@ -54,6 +70,27 @@ export default class SupplyQuest extends Quest {
       `за ${Math.round(this.spending.money/this.checking.space)} за единицу. Если Вы доставите ${this.checking.space}, ` +
       `то закроете эту потребность и ${creatures[this.terms.player].name} будут вам очень благодарны`;
 
+  }
+
+  accept() {
+    //проверка корабля на возможность участия
+  }
+
+  /**
+   * Обновление квеста. Проверяет и изменяет флаги:
+   * - Актуальность квеста,
+   * - Возможность добваться до квеста
+   */
+  refresh() {
+
+
+    let way = [];
+    way = map.buildWay(this.terms.sectorID);
+    if (!way.length) {
+      this.reach = false;
+    } else {
+      this.reach = true;
+    }
   }
 
   complite() {

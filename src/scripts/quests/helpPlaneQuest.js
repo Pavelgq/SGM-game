@@ -1,4 +1,4 @@
-import Quest from "./quest";
+import Quest from "./quest.js";
 
 
 export default class HelpPlaneQuest extends Quest {
@@ -20,44 +20,114 @@ export default class HelpPlaneQuest extends Quest {
       time: {}
     };
 
+    this.way = [];
+    this.way = map.buildWay(this.terms.sectorID);
+    if (!this.way.length) {
+      this.reach = false;
+    } else {
+      this.reach = true;
+    }
+
     const science = creatures[this.terms.player].state.science;
 
     this.bonuses.exp = randomNumber(10 * science, 20 * science);
 
-    this.spending.money = 0
-    this.spending.fuel = 0
+    
     this.checking.speed = 0;
-    this.checking.space = randomNumber(1, 4); //столько, сколько путь для этого сектора
+    this.checking.space = (this.way.length * this.plane.params.speed || "ошибка") ; //Сколько топлива взять с собой = Количество секторов до корабля уможенное на скорость
 
-    const currentSector = creatures[this.terms.player].sectors[randomNumber(0, creatures[this.terms.player].sectors.length - 1)];
-    const currentPlanet = this.planetName(currentSector);
-    const targetPlanet = this.planetName(map.sectors[this.terms.sectorID]);
+    let date = new Date(time);
+    date.setDate(time.getDate() + this.plane.liveSupport);
+    this.terms.time = date;
 
-    let slowDate = new Date(time);
-    let fastDate = new Date(time);
-    slowDate.setDate(time.getDate() + this.getTime(false));
-    fastDate.setDate(time.getDate() + this.getTime(true));
-    this.terms.time.fast = fastDate;
-    this.terms.time.slow = slowDate;
+    this.name = `Дозаправка корабля <i>${this.plane.name}</i> в секторе ${this.terms.sectorID}`;
+    this.description = `Корабль <i>${this.plane.name}</i> остался без топлива ` +
+      `в секторе ${this.terms.sectorID}. Его ресурсов жизнеобеспечения хватит до ${this.terms.time}. ` + 
+      'Требуется его спасти по возможности. ';
+  }
 
-    const resources = MAS_RESOURCES[randomNumber(0, MAS_RESOURCES.length - 1)];
+  /**
+   * Обновление квеста. Проверяет и изменяет флаги:
+   * - Актуальность квеста,
+   * - Возможность добваться до квеста
+   */
+  refresh() {
 
-    this.name = `Поставка <b>${resources}</b> на планету <i>${targetPlanet}</i> сектор ${this.terms.sectorID}`;
-    this.description = `В связи с "какое-то событие" ` +
-      `${creatures[this.terms.player].name} с планеты <i>${currentPlanet}</i> нуждается в <b>${resources}</b> и готовы приобрести ` +
-      `за ${Math.round(this.spending.money/this.checking.space)} за единицу. Если Вы доставите ${this.checking.space}, ` +
-      `то закроете эту потребность и ${creatures[this.terms.player].name} будут вам очень благодарны`;
+
+    let way = [];
+    way = map.buildWay(this.terms.sectorID);
+    if (!way.length) {
+      this.reach = false;
+    } else {
+      this.reach = true;
+    }
   }
 
   complite() {
+    const player = this.model.player;
+    const exp = this.bonuses.exp;
 
+    this.plane.state.fuel = this.checking.space;
+    this.plane.status = 'летит в ангар';
+
+    player.state.exp += exp;
   }
 
   failure() {
-
+    let planeID;
+    this.model.player.hungar.planes.array.some((plane, index) => {
+      if (plane == this.plane) {
+        planeID = index;
+        return true;
+      }
+    });
+    this.model.player.hungar.planes.splice(planeID, 1);
   }
 
   view() {
+    const quest = this;
+    //сгенерировать награды
+    let bonuses = `<div class="wrapper"><span>Корабль ${thus.plane.name}:</span><span >снова в строю</span></div>`;
+    if (quest.bonuses.exp) {
+      bonuses += `<div class="wrapper"><span>Опыт:</span><span class="conditions__exp">${quest.bonuses.exp}</span></div>`;
+    };
 
+    //сгенерировать требования
+    let checking = '';
+    if (quest.checking.fuel) {
+      checking += `<div class="wrapper"><span>Топливо:</span><span class="conditions__fuel">${quest.checking.fuel}</span></div>`;
+    };
+    if (quest.checking.space) {
+      checking += `<div class="wrapper"><span>Трюм:</span><span class="conditions__money">${quest.checking.space}</span></div>`;
+    };
+    if (quest.checking.speed) {
+      checking += `<div class="wrapper"><span>Скорость:</span><span class="conditions__money">${quest.checking.speed}</span></div>`;
+    };
+
+    let opened = quest.open ? '' : 'visually-hidden';
+
+    let template = `<li class="quest__item" data-id = "${quest.index}">
+        <button class="quest__accordion" >
+                  <h3 class="quest__title" >${quest.name}</h3>
+                </button>
+                <div class="quest__panel ${opened}">
+          <span class="quest__type">Тип: ${quest.type}</span>
+          <p class="quest__description">${quest.description}
+          </p>
+          
+          <div class="quest__bonuses conditions">
+            <h4 class="quest__subtitle">Награды</h4>
+            ${bonuses}
+          </div>`;
+
+    if (checking) {
+      template += `<div class="quest__checking conditions">
+          <h4 class="quest__subtitle">Требования</h4>
+          ${checking}
+        </div>`
+    }
+
+    return template;
   }
+
 }

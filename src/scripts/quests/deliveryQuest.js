@@ -1,4 +1,12 @@
-import Quest from "./quest";
+import Quest from "./quest.js";
+
+import func from "../utils/functions.js";
+
+const {
+  randomNumber,
+  formatDate
+} = func;
+
 
 export default class DeliveryQuest extends Quest {
 
@@ -21,6 +29,14 @@ export default class DeliveryQuest extends Quest {
       player: players[randomNumber(0, players.length - 1)],
       time: {}
     };
+
+    this.way = [];
+    this.way = map.buildWay(this.terms.sectorID);
+    if (!this.way.length) {
+      this.reach = false;
+    } else {
+      this.reach = true;
+    }
 
     const bank = creatures[this.terms.player].state.money;
     const science = creatures[this.terms.player].state.science;
@@ -46,7 +62,7 @@ export default class DeliveryQuest extends Quest {
     this.terms.time.fast = fastDate;
     this.terms.time.slow = slowDate;
 
-    const resources = MAS_RESOURCES[randomNumber(0, MAS_RESOURCES.length - 1)];
+    const resources = this.MAS_RESOURCES[randomNumber(0, this.MAS_RESOURCES.length - 1)];
  
     this.name = `${this.type} на планету <i>${targetPlanet}</i> сектор ${this.terms.sectorID}`;
     this.description = `${creatures[this.terms.player].name} с планеты <i>${currentPlanet}</i> сектора ${currentSector.id} ` +
@@ -58,6 +74,23 @@ export default class DeliveryQuest extends Quest {
 
   accept() {
       //проверка корабля на возможность участия
+  }
+
+    /**
+   * Обновление квеста. Проверяет и изменяет флаги:
+   * - Актуальность квеста,
+   * - Возможность добваться до квеста
+   */
+  refresh() {
+
+
+    let way = [];
+    way = map.buildWay(this.terms.sectorID);
+    if (!way.length) {
+      this.reach = false;
+    } else {
+      this.reach = true;
+    }
   }
 
   complite() {

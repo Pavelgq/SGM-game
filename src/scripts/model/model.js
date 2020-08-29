@@ -1,6 +1,10 @@
 import EventEmitter from '../control/eventEmmiter.js';
 import Galaxy from '../map/galaxy.js';
 import Quest from '../quests/quest.js';
+import DeliveryQuest from '../quests/deliveryQuest.js';
+import SupplyQuest from '../quests/supplyQuest.js';
+// import HelpPlaneQuest from '../quests/helpPlaneQuest.js';
+
 
 import Creatures from '../npc/creatures.js';
 import Bugs from '../npc/bugs.js';
@@ -9,6 +13,8 @@ import Turkeys from '../npc/turkeys.js';
 import Pirates from '../npc/pirates.js';
 import Player from '../player/player.js';
 import News from '../info/news.js';
+
+
 
 import func from "../utils/functions.js";
 
@@ -63,9 +69,37 @@ export default class Model extends EventEmitter {
   createQuests() {
     
     for (let i = 0; i < 6; i++) {
-      this.quests.push(new Quest(this.selectQuestType(), this, i));
+      // this.quests.push(new Quest(this.selectQuestType(), this, i));
+      let newQuest = this.generateQuest(this.selectQuestType(), i);
+      newQuest.create();
+      this.quests.push(newQuest);
     }
     this.news.addNews('Созданы новые квесты');
+  }
+
+  generateQuest(type, index) {
+      switch (type) {
+        case 'поставка':
+          return new SupplyQuest(this, index);
+          break;
+        case 'охота':
+  
+          break;
+        case 'доставка':
+          return new DeliveryQuest(this, index);
+          break;
+        case 'караван':
+  
+          break;
+        case 'конвой':
+  
+          break;
+        case 'извоз':
+  
+          break;
+        default:
+          break;
+      }
   }
 
   acceptQuest({index, event}) {
@@ -92,7 +126,9 @@ export default class Model extends EventEmitter {
     let id = index;
     this.quests[id] = new Quest(this.selectQuestType(), this, id);
   }
-
+/**
+ * Проверяет квест на актуальность
+ */
   checkQuests() {
     this.quests.forEach(quest => {
       if(!quest.checkTime(this.time)) {
@@ -103,10 +139,16 @@ export default class Model extends EventEmitter {
     })
   }
 
+  /**
+   * Проверяет корабль 
+   * - если дрейфует, генерировать квест на спасение
+   * - если закончились ресурсы - удалить
+   */
   checkPlanes() {
-    this.hangar.planes.forEach(plane => {
+    this.player.hangar.planes.forEach(plane => {
       if (plane.status == 'дрейфует') {
         this.quests[this.quests.length] = new Quest("дозаправка", this, this.quests.length);
+        plane.status = 'ждет помощь';
       }
     })
   }
