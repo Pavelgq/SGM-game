@@ -195,8 +195,7 @@ export default class Galaxy {
     while (openSectors.length > 0) {
       let taken = this.minF(openSectors);
       if (taken.pos.cube.equal(target.pos.cube)) {
-        from.push(target.pos);
-        return from;
+        return this.generateWay(taken);
       }
       for (let i = 0; i < openSectors.length; i++) {
         if (openSectors[i].pos.cube.equal(taken.pos.cube)) {
@@ -207,12 +206,14 @@ export default class Galaxy {
       let neighbors = this.getNear(taken, closedSectors);
       neighbors.forEach(neighbor => {
         let tempG = taken.G + taken.pos.cube.distance(neighbor.pos.cube);
-        if (!this.inOpen(neighbor, openSectors) || tempG < neighbor.G) {
-            from[j] = taken.pos;
-            neighbor.G = tempG;
-            neighbor.F = neighbor.G + neighbor.pos.cube.distance(target.pos.cube);
-            if (!this.inOpen(neighbor, openSectors)) {
-              openSectors.push(neighbor);
+        let next = this.inOpen(neighbor, openSectors);
+        if (next == neighbor || tempG < next.G) {
+            next.from = taken;
+      
+            next.G = tempG;
+            next.F = next.G + next.pos.cube.distance(target.pos.cube);
+            if (next == neighbor) {
+              openSectors.push(next);
             }
         }
       })
@@ -222,16 +223,24 @@ export default class Galaxy {
     return 0;
   }
 
+  generateWay(end) {
+    let current = end;
+    let result = [];
+    while (current != undefined) {
+      result.unshift(current.pos);
+      current = current.from;
+    }
+    return result;
+  }
+
   inOpen(taken, openSectors) {
       for (let i = 0; i < openSectors.length; i++) {
         const sector = openSectors[i];
         if (taken.pos.cube.equal(sector.pos.cube)) {
-          taken.G = sector.G;
-          taken.F = sector.F;
-          return true;
+          return sector;
         }
       }
-      return false;
+      return taken;
   }
 
   minF(openSectors) {
