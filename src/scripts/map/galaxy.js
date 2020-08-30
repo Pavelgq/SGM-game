@@ -177,13 +177,13 @@ export default class Galaxy {
    * Строит путь от текущей позиции, до целевого сектора
    * обходя сингулярности и враждебные сектора
    * возвращает пустой массив, если невозможно добраться
-   * @param {Number} sectorID 
+   * @param {Number} targetID 
    */
-  buildWay(sectorID) {
+  buildWay(targetID, currentID) {
     const current = {};
-    current.pos = this.sectors[this.position];
+    current.pos = this.sectors[currentID || this.position];
     const target = {};
-    target.pos = this.sectors[sectorID];
+    target.pos = this.sectors[targetID];
 
     const openSectors = [current];
     const closedSectors = [];

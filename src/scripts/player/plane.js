@@ -9,10 +9,9 @@ export default class Plane {
   /**
    * Название корабля, количество топлива, базовые характеристики, свободное место в трюмах, количество пассажиров
    */
-  constructor(rang) {
+  constructor(rang, place) {
     this.name = this.generateName();
     this.rang = rang;
-    this.distance = 0;
     this.params = {
       fuel: 0,
       attack: 0,
@@ -43,8 +42,17 @@ export default class Plane {
 
     this.open = false;
 
-    this.liveSupport = 5;
+    this.place = place;
+    this.distance = {
+      pass: [],
+      remain: [],
+      interval: 0
+    }
+
+    this.liveSupport = 5; //система жизнеобеспечения
   }
+
+  
 
   /**
    * Генерирует название корабля
@@ -135,6 +143,18 @@ export default class Plane {
     return false;
   }
 
+  
 
+  refreshPos() {
+    if (Object.keys(this.currentQuest).length != 0) {
+      let map = this.currentQuest.model.map;
+      if (!this.distance.pass.length && !this.distance.remain.length) {
+        this.distance.pass = map.buildWay(this.currentQuest.terms.sectorID, this.place);
+      }
+    } else {
+      this.distance.pass = [];
+      this.distance.remain = [];
+    }
+  }
   
 }

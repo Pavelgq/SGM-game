@@ -114,12 +114,12 @@ export default class Model extends EventEmitter {
         this.quests.splice(id, 1);
         plane.status = "на задании";
         let targetCoord = this.map.sectors[plane.currentQuest.terms.sectorID].cube;
-        plane.distance = targetCoord.distance(this.map.sectors[this.map.position].cube) * 2;
-        plane.distance = Math.round(plane.distance / plane.params.speed);
+        plane.distance.remain = this.map.buildWay(plane.currentQuest.terms.sectorID, plane.place);
+        plane.distance.interval = plane.distance.remain.length * 10;
         return true;
       }
     });
-    this.news.addNews(`Игрок принял квест ${this.quests[id].name}`);
+    this.news.addNews(`Игрок принял квест ${this.quests[id].name} для корабля <i>${value}</i>`);
   }
 
   resetQuest({index}) {

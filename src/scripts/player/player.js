@@ -10,7 +10,8 @@ export default class Player {
 
   constructor(place, creatures) {
     this.place = place;
-    this.hangar = new Hangar();
+    this.hangar = new Hangar(place);
+
     this.state = {
       exp: 0,
       money: 0,

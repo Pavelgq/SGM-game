@@ -1,18 +1,19 @@
 import Plane from "./plane.js"
+import PlaneView from "./planeView.js";
 
 export default class Hangar {
-  constructor() {
+  constructor(place) {
     this.planes = [];
 
     this.questBuffer = [];
-    this.createPlane();
-    this.createPlane();
+    this.createPlane(place);
+    this.createPlane(place);
 
     this.togglePlane = this.togglePlane.bind(this);
   }
 
-  createPlane() {
-    const plane = new Plane(1);
+  createPlane(place) {
+    const plane = new Plane(1, place);
     this.planes.push(plane);
   }
 
@@ -38,6 +39,7 @@ export default class Hangar {
 
   changeState() {
     this.planes.forEach(plane => {
+      this.changePlanePos(plane);
       if (plane.status == 'на задании') {
         if (plane.state.fuel > 0 && plane.distance > 0) {
           plane.state.fuel -= 1;
@@ -59,5 +61,28 @@ export default class Hangar {
         }
       }
     });
+  }
+
+  changePlanePos(plane) {
+    if (plane.distance.interval > 0) {
+      plane.distance.interval = plane.distance.interval - plane.params.speed;
+
+      if (plane.distance.remain.length * 10 >= plane.distance.interval) {
+        plane.distance.pass.push(plane.distance.remain[plane.distance.remain.length-1]);
+        plane.distance.remain.splice(plane.distance.remain.length-1, 1);
+        plane.state.fuel -= 1;
+      }
+    }
+    else {
+      if (plane.distance.interval < 0) {
+        plane.distance.interval = plane.distance.interval + plane.params.speed;
+  
+        if (plane.distance.pass.length * 10 <= plane.distance.interval) {
+          plane.distance.pass.splice(plane.distance.remain.length-1, 1);
+          plane.state.fuel -= 1;
+        }
+      }
+    }
+    
   }
 }
