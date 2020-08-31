@@ -19,7 +19,7 @@ export default class View extends EventEmitter {
   constructor(model) {
     super();
     this.model = model;
-    this.playfield = new Playfield(map, 320, 400, this.model.map);
+    this.playfield = new Playfield(map, 320, 400, this.model);
 
     this.screens = document.querySelector('.playfield--wrapper').children;
     this.time = document.getElementById('date');
@@ -107,7 +107,7 @@ export default class View extends EventEmitter {
     const items = container.querySelectorAll(".quest__item");
     items.forEach((item, index) => {
       let minCanvas = item.querySelector(".quest__about");
-      let questPlayfield = new Playfield(minCanvas, 125, 150, this.model.map);
+      let questPlayfield = new Playfield(minCanvas, 125, 150, this.model);
       questPlayfield.renderQuestMap(this.model.quests[index].terms.sectorID);
       console.log(this.model.map.buildWay(this.model.quests[index].terms.sectorID));
 

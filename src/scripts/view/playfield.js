@@ -1,7 +1,9 @@
 import Point from "../map/point.js";
 import func from '../utils/functions.js';
 
-const {scaleCanvas} = func;
+const {
+  scaleCanvas
+} = func;
 const SIZE = 20;
 
 
@@ -12,7 +14,7 @@ export default class Playfield {
    * @param {*} width 
    * @param {*} height 
    */
-  constructor(element, width, height, map) {
+  constructor(element, width, height, model) {
     this.element = element;
     this.width = width;
     this.height = height;
@@ -25,27 +27,23 @@ export default class Playfield {
     this.context = this.canvas.getContext('2d');
 
     scaleCanvas(this.canvas, this.context, this.width, this.height);
-    
+
 
     this.element.appendChild(this.canvas);
 
-    this.map = map;
+    this.model = model;
+    this.map = model.map;
     this.start = new Point(this.width / 7, this.height / 16);
 
     this.mouseMove = this.mouseMove.bind(this);
     this.canvas.addEventListener('mousemove', this.mouseMove, false);
   }
 
-  printWay(sectorID) {
-    console.log(this.map.buildWay(sectorID));
-  }
-
   /**
    * Рендерит карту на поле
-   * @param {*} map 
    */
   renderMap() {
-    
+
     this.context.beginPath();
     this.context.fillStyle = "sandybrown";
     this.context.strokeStyle = '#eeeeee'
@@ -53,7 +51,7 @@ export default class Playfield {
     this.context.fill();
     // this.context.lineWidth = 7.0;
     // this.context.stroke();
-    
+
 
     this.map.sectors.forEach(element => {
       let colorBack;
@@ -70,6 +68,13 @@ export default class Playfield {
       const start = new Point(point.x, point.y);
       this.printHex(this.context, element, start, SIZE);
     })
+
+    let planes = this.model.player.hangar.planes;
+    planes.forEach(plane => {
+      let way = [];
+      way = plane.distance.pass;
+      this.printWay( this.context, way, this.start, SIZE)
+    })
     //TODO: Придумать, что-то чтобы цвет менялся при наведении, как раньше.
     //TODO: Предлогаю написать еще функцию для рендера большых многогранников.
   }
@@ -78,8 +83,8 @@ export default class Playfield {
    */
   renderQuestMap(targetSector) {
     this.canvas.removeEventListener('mousemove', this.mouseMove);
-  
-    
+
+
     this.context.beginPath();
     this.context.fillStyle = "sandybrown";
     this.context.strokeStyle = '#eeeeee'
@@ -87,10 +92,10 @@ export default class Playfield {
     this.context.fill();
     // this.context.lineWidth = 7.0;
     // this.context.stroke();
-    
+
     let startPoint = new Point(this.width / 7, this.height / 16);
     let size = 8;
-    
+
     this.map.sectors.forEach(element => {
       let nowSize = 8;
       let colorBack;
@@ -109,25 +114,46 @@ export default class Playfield {
       this.printHex(this.context, element, start, nowSize);
     })
 
-    
+
     const way = this.map.buildWay(targetSector);
-    this.context.beginPath();
-    this.context.fillStyle = "sandybrown";
-    this.context.strokeStyle = 'black'
+    this.printWay( this.context, way, startPoint, size)
+
+    // this.context.beginPath();
+    // this.context.fillStyle = "sandybrown";
+    // this.context.strokeStyle = 'black'
+    // const beginPoint = this.cubeToPixel(this.map.sectors[this.map.position].cube, startPoint, size);
+    // this.context.moveTo(beginPoint.x, beginPoint.y);
+    // if (way) {
+    //   way.forEach(sector => {
+
+    //     const point = this.cubeToPixel(sector.cube, startPoint, size);
+
+    //     this.context.lineTo(point.x, point.y)
+    //     this.context.stroke();
+    //   });
+    // }
+
+
+    // this.context.closePath();
+  }
+
+  printWay(ctx, way, startPoint, size) {
+    //const way = this.map.buildWay(targetSector);
+    ctx.beginPath();
+    ctx.fillStyle = "sandybrown";
+    ctx.strokeStyle = 'black'
     const beginPoint = this.cubeToPixel(this.map.sectors[this.map.position].cube, startPoint, size);
-    this.context.moveTo(beginPoint.x, beginPoint.y); 
+    ctx.moveTo(beginPoint.x, beginPoint.y);
     if (way) {
       way.forEach(sector => {
 
         const point = this.cubeToPixel(sector.cube, startPoint, size);
-  
-        this.context.lineTo(point.x,point.y)
-        this.context.stroke();
+
+        ctx.lineTo(point.x, point.y)
+        ctx.stroke();
       });
     }
-   
-
-    this.context.closePath();
+    ctx.closePath();
   }
 
   printHex(ctx, sector, center, size) {
@@ -145,20 +171,20 @@ export default class Playfield {
     if (this.map.position == sector.id) {
       ctx.lineWidth = 7.0;
       ctx.strokeStyle = "#E66A6A";
-    }else {
+    } else {
       ctx.lineWidth = 3.0;
       ctx.strokeStyle = "black";
     }
-    
+
     ctx.closePath();
-    
+
     ctx.stroke();
     ctx.fill();
 
     if (this.map.position == sector.id) {
       ctx.beginPath();
       ctx.fillStyle = "#5190DD";
-      ctx.rect(center.x-3, center.y-12,6, 6);
+      ctx.rect(center.x - 3, center.y - 12, 6, 6);
       ctx.fill();
       //выделять крассным
     }
@@ -166,10 +192,10 @@ export default class Playfield {
 
     //Что-нибудь написать можно так
 
-      // const text = {
-      //   "ID": sector.id
-      // }
-      // this.textOnHex(ctx, center, text, "#DD6448", 10) 
+    // const text = {
+    //   "ID": sector.id
+    // }
+    // this.textOnHex(ctx, center, text, "#DD6448", 10) 
   }
 
   printBigHex(ctx, sector, size) {
@@ -193,35 +219,35 @@ export default class Playfield {
     const text = {
       "ID": sector.id,
       "Тип": sector.state.type,
-      "Проживает": (Object.keys(sector.inmates).length == 0)? 'пустой' : sector.inmates.name,
+      "Проживает": (Object.keys(sector.inmates).length == 0) ? 'пустой' : sector.inmates.name,
       "Ресурcы": sector.state.quantRes,
-      "Планет": sector.state.planets.length 
+      "Планет": sector.state.planets.length
 
     }
-    this.textOnHex(ctx, new Point(this.width / 2, this.height / 3), text, "#DD6448") 
+    this.textOnHex(ctx, new Point(this.width / 2, this.height / 3), text, "#DD6448")
   }
 
   textOnHex(ctx, center, text, color, size) {
-      ctx.save();
-      ctx.lineWidth = 1.0;
-      ctx.strokeStyle = color;
-      // ctx.font = `${size}px sansserif`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.translate(center.x, center.y);
-      //ctx.rotate((Math.PI / 180) * 25);
-      ctx.translate(-center.x, -center.y);
-      let pos = 0;
-      //Проверка на объект в переменной text
-      for (const key in text) {
-        if (text.hasOwnProperty(key)) {
-          const element = text[key];
-          ctx.strokeText(`${key}: ${element}`, center.x, center.y + pos);
-          pos+=14;
-        }
+    ctx.save();
+    ctx.lineWidth = 1.0;
+    ctx.strokeStyle = color;
+    // ctx.font = `${size}px sansserif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.translate(center.x, center.y);
+    //ctx.rotate((Math.PI / 180) * 25);
+    ctx.translate(-center.x, -center.y);
+    let pos = 0;
+    //Проверка на объект в переменной text
+    for (const key in text) {
+      if (text.hasOwnProperty(key)) {
+        const element = text[key];
+        ctx.strokeText(`${key}: ${element}`, center.x, center.y + pos);
+        pos += 14;
       }
-      
-      ctx.restore();
+    }
+
+    ctx.restore();
   }
 
   cubeToPixel(now, start, size) {

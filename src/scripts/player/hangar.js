@@ -41,7 +41,7 @@ export default class Hangar {
     this.planes.forEach(plane => {
       this.changePlanePos(plane);
       if (plane.status == 'на задании') {
-        if (plane.state.fuel > 0 && plane.distance > 0) {
+        if (plane.state.fuel > 0 && plane.distance.interval > 0) {
           plane.state.fuel -= 1;
           plane.distance -= 1;
         } else {
@@ -57,7 +57,6 @@ export default class Hangar {
               plane.status = 'дрейфует';
             }
           }
-
         }
       }
     });
