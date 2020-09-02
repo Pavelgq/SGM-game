@@ -5,7 +5,7 @@ export default class HelpPlaneQuest extends Quest {
 
   constructor(model, index, plane) {
     super(model, index);
-    this.type = 'дозаправка';
+    this.type = 'Дозаправка';
 
     this.targerPlane = plane;
   }

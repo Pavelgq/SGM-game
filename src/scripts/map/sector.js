@@ -32,7 +32,7 @@ export default class Sector {
    */
   getScience() {
     if (Object.keys(this.inmates).length != 0) {
-      return this.inmates.state.science || 0;
+      return this.inmates.state.science || 1;
     }
     return 1;
   }

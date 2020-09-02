@@ -12,7 +12,7 @@ export default class DeliveryQuest extends Quest {
 
   constructor(model, index) {
     super(model, index);
-    this.type = 'доставка';
+    this.type = 'Поставка';
 
     this.startDate = new Date(this.model.time); 
 

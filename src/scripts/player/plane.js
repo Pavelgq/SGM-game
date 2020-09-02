@@ -74,7 +74,7 @@ export default class Plane {
         this.params.attack = randomNumber(1, 4);
         this.params.shield = randomNumber(1, 4);
         this.params.space = randomNumber(1, 10);
-        this.params.speed = randomNumber(1, 2);
+        this.params.speed = randomNumber(3, 12);
         this.params.health = randomNumber(1, 20);
         break;
       case 2:
@@ -82,7 +82,7 @@ export default class Plane {
         this.params.attack = randomNumber(4, 9);
         this.params.shield = randomNumber(4, 9);
         this.params.space = randomNumber(5, 15);
-        this.params.speed = randomNumber(2, 4);
+        this.params.speed = randomNumber(5, 15);
         this.params.health = randomNumber(6, 25);
         break;
       case 3:

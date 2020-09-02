@@ -146,11 +146,11 @@ export default class Playfield {
     ctx.moveTo(beginPoint.x, beginPoint.y);
     if (way) {
       way.forEach(sector => {
-
-        const point = this.cubeToPixel(sector.cube, startPoint, size);
-
-        ctx.lineTo(point.x, point.y)
-        ctx.stroke();
+        if (sector != undefined) {
+          const point = this.cubeToPixel(sector.cube, startPoint, size);
+          ctx.lineTo(point.x, point.y)
+          ctx.stroke();
+        }
       });
     }
     ctx.closePath();

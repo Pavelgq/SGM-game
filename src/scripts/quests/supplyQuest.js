@@ -12,7 +12,7 @@ export default class SupplyQuest extends Quest {
 
   constructor(model, index) {
     super(model, index);
-    this.type = 'поставка';
+    this.type = 'Поставка';
 
   }
 

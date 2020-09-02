@@ -45,14 +45,14 @@ export default class Player {
 
     if (this.hangar.questBuffer.length > 0) {
       this.hangar.questBuffer.forEach(quest => {
-        //quest.complite();
-        this.state.money += quest.bonuses.money;
-        this.state.exp += quest.bonuses.exp;
+        quest.complite();
+        // this.state.money += quest.bonuses.money;
+        // this.state.exp += quest.bonuses.exp;
 
-        for (const key in quest.bonuses.reputation) {
-            const element = quest.bonuses.reputation[key];
-            this.relationship[key] += element;
-        }
+        // for (const key in quest.bonuses.reputation) {
+        //     const element = quest.bonuses.reputation[key];
+        //     this.relationship[key] += element;
+        // }
       });
     }
     
