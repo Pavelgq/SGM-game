@@ -43,7 +43,7 @@ export default class Sector {
     }
 
     const npc = this.inmates;
-    if (npc.relationship.player <= 0) {
+    if (npc.relationship.player < 0) {
       return true;
     }
   }

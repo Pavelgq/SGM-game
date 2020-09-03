@@ -37,7 +37,7 @@ export default class Quest {
       fuel: 0,
       speed: 0
     };
-    this.generateQuest(model);
+    // this.generateQuest(model);
 
     this.way = [];
 

@@ -109,7 +109,7 @@ export default class View extends EventEmitter {
       let minCanvas = item.querySelector(".quest__about");
       let questPlayfield = new Playfield(minCanvas, 125, 150, this.model);
       questPlayfield.renderQuestMap(this.model.quests[index].terms.sectorID);
-      console.log(this.model.map.buildWay(this.model.quests[index].terms.sectorID));
+      // console.log(this.model.map.buildWay(this.model.quests[index].terms.sectorID));
 
       const button = item.querySelector(".quest__accordion");
       button.addEventListener('click', (event) => {

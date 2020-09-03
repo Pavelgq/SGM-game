@@ -3,7 +3,7 @@ import Galaxy from '../map/galaxy.js';
 import Quest from '../quests/quest.js';
 import DeliveryQuest from '../quests/deliveryQuest.js';
 import SupplyQuest from '../quests/supplyQuest.js';
-// import HelpPlaneQuest from '../quests/helpPlaneQuest.js';
+import HelpPlaneQuest from '../quests/helpPlaneQuest.js';
 
 
 import Creatures from '../npc/creatures.js';
@@ -97,6 +97,7 @@ export default class Model extends EventEmitter {
         case 'извоз':
   
           break;
+        
         default:
           break;
       }
@@ -152,7 +153,11 @@ export default class Model extends EventEmitter {
   checkPlanes() {
     this.player.hangar.planes.forEach(plane => {
       if (plane.status == 'дрейфует') {
-        this.quests[this.quests.length] = new Quest("дозаправка", this, this.quests.length);
+        let lastIndex = this.quests[this.quests.length-1].index;
+        let newId = this.quests.length;
+        this.quests[newId] = new HelpPlaneQuest(this, lastIndex, plane);
+        this.quests[newId].create();
+
         plane.status = 'ждет помощь';
       }
     })

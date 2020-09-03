@@ -131,9 +131,9 @@ export default class Galaxy {
         }
         mas.splice(num, 1);
       }
-      console.log(mas.length, element.type);
+      // console.log(mas.length, element.type);
     });
-    console.log(mas.length);
+    // console.log(mas.length);
   }
   
   /**

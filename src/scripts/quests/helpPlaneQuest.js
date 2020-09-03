@@ -1,5 +1,11 @@
 import Quest from "./quest.js";
 
+import func from "../utils/functions.js";
+
+const {
+  randomNumber,
+  formatDate
+} = func;
 
 export default class HelpPlaneQuest extends Quest {
 
@@ -7,15 +13,16 @@ export default class HelpPlaneQuest extends Quest {
     super(model, index);
     this.type = 'Дозаправка';
 
-    this.targerPlane = plane;
+    this.targetPlane = plane;
   }
 
   create() {
     const time = this.model.time;
     const map = this.model.map;
 
+    let posAlarm = this.targetPlane.place;
     this.terms = {
-      sectorID: this.plane.position, //придется рисовать путь на карте, для подобных случаев
+      sectorID: posAlarm, //придется рисовать путь на карте, для подобных случаев
       player: '',
       time: {}
     };
@@ -28,21 +35,21 @@ export default class HelpPlaneQuest extends Quest {
       this.reach = true;
     }
 
-    const science = creatures[this.terms.player].state.science;
+    // const science = creatures[this.terms.player].state.science;
 
-    this.bonuses.exp = randomNumber(10 * science, 20 * science);
+    this.bonuses.exp = randomNumber(10 , 20);
 
     
     this.checking.speed = 0;
-    this.checking.space = (this.way.length * this.plane.params.speed || "ошибка") ; //Сколько топлива взять с собой = Количество секторов до корабля уможенное на скорость
+    this.checking.space = (this.way.length * this.targetPlane.params.speed || "ошибка") ; //Сколько топлива взять с собой = Количество секторов до корабля уможенное на скорость
 
     let date = new Date(time);
-    date.setDate(time.getDate() + this.plane.liveSupport);
+    date.setDate(time.getDate() + this.targetPlane.liveSupport);
     this.terms.time = date;
 
-    this.name = `Дозаправка корабля <i>${this.plane.name}</i> в секторе ${this.terms.sectorID}`;
-    this.description = `Корабль <i>${this.plane.name}</i> остался без топлива ` +
-      `в секторе ${this.terms.sectorID}. Его ресурсов жизнеобеспечения хватит до ${this.terms.time}. ` + 
+    this.name = `Дозаправка корабля <i>${this.targetPlane.name}</i> в секторе ${this.terms.sectorID}`;
+    this.description = `Корабль <i>${this.targetPlane.name}</i> остался без топлива ` +
+      `в секторе ${this.terms.sectorID}. Его ресурсов жизнеобеспечения хватит до ${formatDate(date)}. ` + 
       'Требуется его спасти по возможности. ';
   }
 
@@ -67,8 +74,8 @@ export default class HelpPlaneQuest extends Quest {
     const player = this.model.player;
     const exp = this.bonuses.exp;
 
-    this.plane.state.fuel = this.checking.space;
-    this.plane.status = 'летит в ангар';
+    this.targetPlane.state.fuel = this.checking.space;
+    this.targetPlane.status = 'летит в ангар';
 
     player.state.exp += exp;
   }

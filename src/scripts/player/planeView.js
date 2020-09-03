@@ -19,7 +19,7 @@ export default class PlaneView {
         </button>
         <div class="plane__panel--min">
           <div class="wrapper">
-            <span>Статус:</span><span>${plane.status} ${plane.distance?plane.distance:'-'}</span>
+            <span>Статус:</span><span>${plane.status} ${plane.distance.interval?plane.distance.interval:'-'}</span>
             <span>Топливо:</span><span>${plane.state.fuel}(${plane.params.fuel})</span>
             <span>Корпус:</span><span>${plane.state.health}(${plane.params.health})</span>
           </div>
@@ -62,7 +62,7 @@ export default class PlaneView {
     </button>
     <div class="plane__panel--min">
       <div class="wrapper">
-        <span>Статус:</span><span>${plane.status} ${plane.distance?plane.distance:'-'}</span>
+        <span>Статус:</span><span>${plane.status} ${plane.distance.interval?plane.distance.interval:'-'}</span>
         <span>Топливо:</span><span>${plane.params.fuel}</span>
         <span>Корпус:</span><span>${plane.params.health}</span>
       </div>
