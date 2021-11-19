@@ -1,6 +1,6 @@
 # SGM-game
 
-Браузерная игра "Space Guild Meneger" (в разработке)
+Браузерная игра "Space Guild Manager" (в разработке)
 
 ![alt text](https://github.com/Pavelgq/SGM-game/blob/master/map-screen.png "Экран с картой")
 
