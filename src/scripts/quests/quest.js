@@ -9,7 +9,7 @@ const {
   readFile
 } = system
 
-const planetNames = readFile("./data/planets.json", "planets");
+// const planetNames = readFile("src/data/planets.json", "planets");
 export default class Quest {
   
   constructor(model, index) {

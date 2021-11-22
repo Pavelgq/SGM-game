@@ -175,7 +175,7 @@ gulp.task("copy", function () {
 
 gulp.task('copy-data', function() {
   return gulp.src('./src/data/*.json')
-    .pipe(gulp.dest('build/data'));
+    .pipe(gulp.dest('build/src/data'));
 });
 
 
