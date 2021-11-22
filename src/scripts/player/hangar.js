@@ -88,7 +88,7 @@ export default class Hangar {
           plane.distance.remain = plane.distance.pass;
           plane.distance.pass = [];
           plane.distance.interval = 0;
-        }
+        } 
         plane.distance.interval = plane.distance.interval + plane.params.speed;
   
         if (plane.distance.pass.length * 10 <= plane.distance.interval) {

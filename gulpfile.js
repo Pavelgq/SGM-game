@@ -78,6 +78,7 @@ gulp.task("webp", function () {
     .pipe(gulp.dest("build/img"));
 });
 
+
 // Создание векторного спрайта
 // gulp.task("sprite", function () {
 //   return gulp.src("img/**/*.svg")
@@ -164,11 +165,17 @@ gulp.task("copy", function () {
   return gulp.src([
       "fonts/*.{woff,woff2}",
       "img/**",
-      "js/*.js"
+      "js/*.js",
+      "data/*.json"
     ], {
       base: "."
     })
     .pipe(gulp.dest("build"));
+});
+
+gulp.task('copy-data', function() {
+  return gulp.src('./src/data/*.json')
+    .pipe(gulp.dest('build/data'));
 });
 
 
@@ -182,9 +189,10 @@ gulp.task("clean", function () {
 gulp.task("build", gulp.series(
   "clean",
   "copy",
+  "copy-data",
   "style",
   "uglify",
   "sprite",
   "html",
-  "webp"
+  "webp",
 ));
