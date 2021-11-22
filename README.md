@@ -2,6 +2,8 @@
 
 Браузерная игра "Space Guild Manager" (в разработке)
 
+Оценить задумку можно в [Demo-версии](https://pavelgq.github.io/SGM-game/)
+
 ![alt text](https://github.com/Pavelgq/SGM-game/blob/master/map-screen.png "Экран с картой")
 
 ## Build Setup
