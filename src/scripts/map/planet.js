@@ -4,7 +4,7 @@ const {
   readFile
 } = system
 
-const planetNames = readFile("./src/data/planets.json", "planets");
+const planetNames = readFile("https://raw.githubusercontent.com/Lazzaro83/Solar-System/master/planets.json", "planets");
 
 
 export default {
